@@ -1,0 +1,8 @@
+# AIKit transient state
+.aikit/*.lock
+.aikit/*.bak
+.aikit/*.tmp_*
+.aikit/*.corrupt_*
+__pycache__/
+*.py[cod]
+node_modules/

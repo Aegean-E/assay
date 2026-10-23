@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "name": "assay",
+  "test_command": null,
+  "gates": {},
+  "ui_required": false,
+  "created": "2026-10-23"
+}
