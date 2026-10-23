@@ -5,4 +5,20 @@
 .aikit/*.corrupt_*
 __pycache__/
 *.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
 node_modules/
+
+# Assay runtime evidence
+.assay/
+assay-demo/
+demo-output/
+*.evidence.json
+*.evidence.md
+evidence.json
+evidence.md
+assay-evidence.json
+assay-evidence.md

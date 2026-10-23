@@ -9,3 +9,6 @@ Persisted state carries a format version. A loader refuses a version it does not
 without modifying or quarantining that file; older versions migrate when a migration exists.
 
 ## Rules
+- **G-001** (user): Ship only under AGPL-3.0-or-later; keep the evidence core self-hostable and offline-verifiable, with commercial value in enterprise operations, not in withholding verification.
+- **G-002** (user): Optimize every release for a company evaluating it: a 60-second demo, a measurable compliance outcome, and a documented commercial path.
+- **G-003** (user): Do not claim legal certification; compliance documents describe supported evidence, not legal advice.

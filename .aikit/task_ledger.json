@@ -1,5 +1,95 @@
 {
   "version": 1,
-  "active_task": null,
-  "checkpoints": []
+  "active_task": {
+    "task_id": "assay-mvp-v1",
+    "last_phase": "phase 4",
+    "active_phase": 5,
+    "status": "completed",
+    "updated_at": 1792782306.6856322,
+    "completed_at": 1792783024.1932964
+  },
+  "checkpoints": [
+    {
+      "task_id": "assay-mvp-v1",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/6] Product contract: tamper-evident audit evidence for AI agents, AGPL-3.0 core with commercial licensing path",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792775082.325997,
+      "timestamp_str": "2026-10-23 20:04:42",
+      "impact_assessment": {
+        "why": "Companies deploying tool-using agents need defensible records for EU AI Act, ISO 42001 and customer audits; observability traces are not evidence.",
+        "benefits": "A local-first, zero-dependency evidence ledger plus policy findings and a self-contained pack gives buyers a 60-second proof and a clear enterprise upsell.",
+        "risks": "contract: hash-chain and event schema are compatibility surfaces; dependency: none beyond the Python standard library; concurrency: append-only single-writer ledger; state: HMAC key handling and PII retention.",
+        "mitigation": "Version every schema, document the threat model and format, fsync appends, keep keys out of argv/files, recommend WORM storage and PII minimization."
+      }
+    },
+    {
+      "task_id": "assay-mvp-v1",
+      "phase": "phase 3",
+      "phase_num": 3,
+      "description": "[2/6] Core evidence model: canonical event contract, contiguous SHA-256 chain, optional HMAC, tail-read append, tamper and truncation tests",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792782285.9207084,
+      "timestamp_str": "2026-10-23 22:04:45"
+    },
+    {
+      "task_id": "assay-mvp-v1",
+      "phase": "phase 3",
+      "phase_num": 3,
+      "description": "[3/6] Policy engine: first-match rules, action globs, metadata conditions, amount thresholds, fail-closed missing amounts, policy digest binding and drift findings",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792782288.7380965,
+      "timestamp_str": "2026-10-23 22:04:48"
+    },
+    {
+      "task_id": "assay-mvp-v1",
+      "phase": "phase 3",
+      "phase_num": 3,
+      "description": "[4/6] CLI and evidence packs: record, ingest generic/MCP, verify, review, report Markdown/JSON, demo, Error/Why/Fix triad and 0/1/2 exit codes",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792782292.4205685,
+      "timestamp_str": "2026-10-23 22:04:52"
+    },
+    {
+      "task_id": "assay-mvp-v1",
+      "phase": "phase 3",
+      "phase_num": 3,
+      "description": "[5/6] Commercial surface: AGPL-3.0 LICENSE, packaging and console script, cross-platform launchers, CI matrix, business brief, compliance mapping, threat model and launch kit",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792782295.11111,
+      "timestamp_str": "2026-10-23 22:04:55"
+    },
+    {
+      "task_id": "assay-mvp-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[6/6] Verification: 73 tests pass; AIKit 4/4 gates pass; package install and console script smoke; all three launchers smoke-tested. checklists: passed. Delivery not authorized: 5 modified, 13 untracked.",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792782306.6856322,
+      "timestamp_str": "2026-10-23 22:05:06",
+      "handoff": {
+        "state": "73 tests, 4/4 gates, project complete in working tree",
+        "next": "commit and publish only after explicit authorization",
+        "failed": "none",
+        "open": "delivery not authorized",
+        "evidence": "aikit check output and docs/LAUNCH.md"
+      }
+    },
+    {
+      "task_id": "assay-mvp-v1",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'assay-mvp-v1' completed successfully.",
+      "status": "completed",
+      "timestamp": 1792783024.1932974,
+      "timestamp_str": "2026-10-23 22:17:04"
+    }
+  ]
 }

@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "name": "assay",
-  "test_command": null,
+  "test_command": "python -m unittest discover -s tests -t .",
   "gates": {},
   "ui_required": false,
   "created": "2026-10-23"

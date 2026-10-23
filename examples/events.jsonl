@@ -1,0 +1,4 @@
+﻿{"actor":"agent:treasury-bot","action":"invoices.read","outcome":"success","ts":"2026-10-23T09:00:00Z","metadata":{"invoice_count":14}}
+{"actor":"agent:treasury-bot","action":"payments.transfer","outcome":"success","ts":"2026-10-23T09:01:00Z","metadata":{"amount":4200,"approved_by":"controller@acme.example"}}
+{"actor":"agent:treasury-bot","action":"payments.transfer","outcome":"success","ts":"2026-10-23T09:02:00Z","metadata":{"amount":25000}}
+{"actor":"agent:ops-bot","action":"shell.exec","outcome":"success","ts":"2026-10-23T09:03:00Z","metadata":{"command":"pg_dump"}}

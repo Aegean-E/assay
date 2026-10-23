@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "name": "treasury-guardrail",
+  "default": "allow",
+  "rules": [
+    {
+      "id": "block-shell",
+      "action": "shell.*",
+      "effect": "deny"
+    },
+    {
+      "id": "transfer-cap",
+      "action": "payments.*",
+      "effect": "deny",
+      "amount_over": 10000
+    },
+    {
+      "id": "approve-transfers",
+      "action": "payments.transfer",
+      "effect": "require_approval"
+    },
+    {
+      "id": "approve-prod-db",
+      "action": "db.*",
+      "effect": "require_approval",
+      "metadata": {
+        "env": "prod"
+      }
+    }
+  ]
+}
