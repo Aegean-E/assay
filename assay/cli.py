@@ -10,8 +10,10 @@ import tempfile
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
+from . import anchor as anchor_module
+from .anchor import AnchorJournal
 from .demo import run_demo
-from .errors import AssayError, LedgerError, ValidationError
+from .errors import AnchorError, AssayError, LedgerError, ValidationError
 from .ledger import Ledger, LedgerState
 from .model import OUTCOMES, Event, normalize_timestamp
 from .policy import Finding, Policy, drift_findings, load_policy, review_events
@@ -19,6 +21,7 @@ from .report import build_pack, render_markdown, write_report
 from .version import VERSION
 
 DEFAULT_LEDGER = Path(".assay") / "ledger.jsonl"
+DEFAULT_ANCHORS = Path(".assay") / "anchors.jsonl"
 
 
 class Parser(argparse.ArgumentParser):
@@ -76,8 +79,21 @@ def build_parser() -> Parser:
 
     verify = commands.add_parser("verify", help="verify the hash chain and signatures")
     _add_ledger(verify)
+    verify.add_argument("--anchors", type=Path,
+                        help="anchor journal to compare with the ledger")
     verify.add_argument("--json", action="store_true", help="print the verification as JSON")
     verify.set_defaults(handler=_cmd_verify)
+
+    anchor = commands.add_parser("anchor", help="commit the verified ledger head to a journal")
+    _add_ledger(anchor)
+    anchor.add_argument("--anchors", type=Path, default=DEFAULT_ANCHORS,
+                        help=f"anchor journal path (default: {DEFAULT_ANCHORS})")
+    anchor.add_argument("--ledger-label",
+                        help="label stored in the anchor (default: ledger file name)")
+    anchor.add_argument("--key-id", metavar="ID",
+                        help="name of the HMAC key that signed the anchored records")
+    anchor.add_argument("--json", action="store_true", help="print the stored anchor record")
+    anchor.set_defaults(handler=_cmd_anchor)
 
     review = commands.add_parser("review", help="evaluate the ledger against a policy")
     _add_policy(review)
@@ -328,18 +344,89 @@ def _cmd_ingest(args: argparse.Namespace) -> int:
 def _cmd_verify(args: argparse.Namespace) -> int:
     state = _load_state(args.ledger, _key_from_env(args.hmac_key_env))
     verification = state.verification
+    errors = list(verification.errors)
+    anchors_checked = None
+    if args.anchors is not None:
+        anchor_state = AnchorJournal(args.anchors).inspect()
+        anchors_checked = len(anchor_state.records)
+        if not anchor_state.verification.ok:
+            for error in anchor_state.verification.errors:
+                errors.append(f"Anchor journal error: {error}")
+        for anchor in anchor_state.records:
+            seq = anchor["seq"]
+            head = anchor["head"]
+            if seq >= len(state.records):
+                errors.append(
+                    f"Anchor seq {seq} exceeds ledger length ({len(state.records)} record(s)) - tail truncated"
+                )
+            elif state.records[seq]["hash"] != head:
+                errors.append(
+                    f"Anchor seq {seq} head {head} does not match ledger record hash {state.records[seq]['hash']}"
+                )
+    ok = verification.ok and not errors
     if args.json:
-        print(json.dumps(verification.to_dict(), indent=2, sort_keys=True))
-    elif verification.ok:
+        payload = verification.to_dict()
+        payload["ok"] = ok
+        payload["errors"] = errors
+        if anchors_checked is not None:
+            payload["anchors"] = anchors_checked
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    elif ok:
         print(f"Ledger OK: {verification.records} record(s), head {verification.head}")
         print(f"Signed: {'yes' if verification.signed else 'no'}; "
               f"signature checked: {'yes' if verification.key_checked else 'no'}")
+        if anchors_checked is not None:
+            print(f"Anchors OK: {anchors_checked} anchor(s) verified against ledger")
     else:
-        print(f"Ledger FAILED: {len(verification.errors)} problem(s) "
+        print(f"Ledger FAILED: {len(errors)} problem(s) "
               f"in {verification.records} parsed record(s)")
-        for error in verification.errors:
+        for error in errors:
             print(f"  - {error}")
-    return 0 if verification.ok else 1
+    return 0 if ok else 1
+
+
+def _cmd_anchor(args: argparse.Namespace) -> int:
+    if args.hmac_key_env and not args.key_id:
+        raise ValidationError(
+            "An HMAC key requires --key-id.",
+            "the key identifier pairs with the signing key so rotations are traceable without exposing secrets.",
+            "pass --key-id ID alongside --hmac-key-env.",
+        )
+    if args.key_id and not args.hmac_key_env:
+        raise ValidationError(
+            "--hmac-key-env is required when --key-id is passed.",
+            "a key id names the key used to sign the ledger records.",
+            "pass --hmac-key-env VAR alongside --key-id.",
+        )
+    key = _key_from_env(args.hmac_key_env)
+    state = _load_state(args.ledger, key)
+    if not state.verification.ok:
+        print(f"Ledger FAILED: {len(state.verification.errors)} problem(s) "
+              f"in {state.verification.records} parsed record(s)")
+        for error in state.verification.errors:
+            print(f"  - {error}")
+        return 1
+    if not state.records:
+        raise ValidationError(
+            "The ledger has no records to anchor.",
+            "an anchor commits to an existing ledger head.",
+            "record at least one event before anchoring.",
+        )
+    ledger_label = args.ledger_label or args.ledger.name
+    latest = state.records[-1]
+    journal = AnchorJournal(args.anchors)
+    record = journal.append(
+        ledger=ledger_label,
+        seq=latest["seq"],
+        head=state.verification.head,
+        key_id=args.key_id,
+    )
+    if args.json:
+        print(json.dumps(record, indent=2, sort_keys=True))
+    else:
+        print(f"Anchored seq={record['seq']} head={record['head']} in {args.anchors}")
+        print(f"Anchor hash: {record['hash']}")
+    return 0
 
 
 def _review(records: Sequence[Mapping[str, Any]], policy: Policy) -> List[Finding]:

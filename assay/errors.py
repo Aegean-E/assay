@@ -18,3 +18,7 @@ class ValidationError(AssayError):
 
 class LedgerError(AssayError):
     """The ledger cannot be read, appended or verified."""
+
+
+class AnchorError(AssayError):
+    """The anchor journal cannot be read, appended or verified."""

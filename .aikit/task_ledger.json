@@ -1,12 +1,12 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "assay-mvp-v1",
+    "task_id": "assay-anchors-v1",
     "last_phase": "phase 4",
     "active_phase": 5,
     "status": "completed",
-    "updated_at": 1792782306.6856322,
-    "completed_at": 1792783024.1932964
+    "updated_at": 1792831088.0474548,
+    "completed_at": 1792831126.525604
   },
   "checkpoints": [
     {
@@ -90,6 +90,41 @@
       "status": "completed",
       "timestamp": 1792783024.1932974,
       "timestamp_str": "2026-10-23 22:17:04"
+    },
+    {
+      "task_id": "assay-anchors-v1",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/4] Anchor format and journal: canonical anchor payload, strict field validation, append-only journal chained by prev+hash, reader that reports tamper and rollback. [2/4] 'assay anchor' command: verify the ledger first, refuse a broken or empty chain, append {ledger, seq, head, created_at, key_id}. [3/4] 'assay verify --anchors FILE': cross-check every anchored head against the ledger so tail truncation and a full rewrite exit 1. [4/4] Key id and rotation format, published anchor test vector, ADR-006, docs/SECURITY.md and README roadmap, Phase 4 gates.",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792829715.401814,
+      "timestamp_str": "2026-10-24 11:15:15",
+      "impact_assessment": {
+        "why": "The hash chain cannot detect tail truncation or a full rewrite, and docs/SECURITY.md plus ADR-002 both name head anchoring as the first enterprise gap; roadmap item 1 asks for it with a key id and rotation format.",
+        "benefits": "An anchored head proves the ledger reached a known seq/hash; truncation and whole-chain rewrites become detectable offline with the standard library, completing the evidence story the product already claims.",
+        "risks": "contract: a new on-disk anchor format and two CLI surfaces (anchor, verify --anchors); dependency: none, standard library only; concurrency: a second append-only file with the same single-writer assumption as the ledger; state: new anchor journal plus optional key id, no change to existing records; perf: one extra read of ledger and journal on verify",
+        "mitigation": "Strict canonical payload with unknown-field refusal and a published test vector; failing-first tests for tamper, deletion, seq rollback, truncation and rewrite; reuse append_line/fsync and tail reads; keep anchors strictly additive so existing ledgers verify unchanged; ADR and security docs updated before delivery; Phase 4 gates"
+      }
+    },
+    {
+      "task_id": "assay-anchors-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[4/4] Head anchoring with key id and rotation, published anchor test vector, verify cross-checks, ADR-006, docs and tests; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792831088.0474548,
+      "timestamp_str": "2026-10-24 11:38:08"
+    },
+    {
+      "task_id": "assay-anchors-v1",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'assay-anchors-v1' completed successfully.",
+      "status": "completed",
+      "timestamp": 1792831126.5256057,
+      "timestamp_str": "2026-10-24 11:38:46"
     }
   ]
 }

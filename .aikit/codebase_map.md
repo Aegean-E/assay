@@ -6,11 +6,11 @@
 ---
 
 ## 📊 Codebase Metrics
-- **Total Python Modules**: `18`
-- **Total Classes**: `23`
-- **Total Top-Level Functions**: `58`
-- **Total Class Methods**: `99`
-- **Total Source Lines**: `2475`
+- **Total Python Modules**: `20`
+- **Total Classes**: `30`
+- **Total Top-Level Functions**: `68`
+- **Total Class Methods**: `135`
+- **Total Source Lines**: `3245`
 
 ---
 
@@ -30,10 +30,41 @@
 
 ---
 
+### [`assay/anchor.py`](assay/anchor.py)
+> *Append-only anchor journal that commits to a ledger head.*
+
+**Size**: `336` lines (`13024` bytes)
+
+**Classes:**
+- `class Anchor` - *One immutable commitment to a ledger seq and hash.*
+  - Method `.to_dict()`
+  - Method `.from_dict(value)`
+- `class AnchorVerification` - *The outcome of walking the whole anchor journal once.*
+  - Method `.to_dict()`
+- `class AnchorState` - *Anchor records and their verification, read in one pass.*
+  - Property `.latest`
+- `class AnchorJournal` - *Persist anchors in a JSONL file whose every record commits to its predecessor.*
+  - Method `.__init__(path)`
+  - Method `.append(*, ledger, seq, head, key_id, created_at)` - *Append one anchor and return the stored record.*
+  - Method `.inspect()` - *Read and verify every anchor; malformed or tampered records become findings.*
+  - Method `._tail()` - *The previous anchor hash and seq, rejecting a corrupt last line.*
+
+**Functions:**
+- `def anchor_payload(*, schema, ledger, seq, head, created_at, key_id, prev)` - *The exact bytes an anchor hash covers; documented in docs/SECURITY.md.*
+- `def anchor_hash(*, schema, ledger, seq, head, created_at, key_id, prev)` - *SHA-256 over the canonical anchor payload.*
+- `def _digest(value, name)`
+- `def _sequence(value)`
+- `def _ledger_label(value)`
+- `def _key_identifier(value)`
+- `def _created_at(value)`
+- `def _json_line(value)`
+
+---
+
 ### [`assay/cli.py`](assay/cli.py)
 > *Command-line interface for recording, verifying and reviewing agent evidence.*
 
-**Size**: `450` lines (`18834` bytes)
+**Size**: `537` lines (`22738` bytes)
 
 **Classes:**
 - `class Parser` - *Turn argument errors into the Assay triad instead of an unlabelled usage dump.*
@@ -55,6 +86,7 @@
 - `def _parse_ingest(text, input_format, actor, policy_ref)`
 - `def _cmd_ingest(args)`
 - `def _cmd_verify(args)`
+- `def _cmd_anchor(args)`
 - `def _review(records, policy)`
 - `def _cmd_review(args)`
 - `def _cmd_report(args)`
@@ -82,13 +114,14 @@
 ### [`assay/errors.py`](assay/errors.py)
 > *Failures that carry the Error/Why/Fix triad printed by the command line.*
 
-**Size**: `20` lines (`617` bytes)
+**Size**: `24` lines (`717` bytes)
 
 **Classes:**
 - `class AssayError` - *A user-actionable failure; `exit_code` follows the 0/1/2 contract.*
   - Method `.__init__(message, why, fix, exit_code)`
 - `class ValidationError` - *An event or policy document breaks the declared contract.*
 - `class LedgerError` - *The ledger cannot be read, appended or verified.*
+- `class AnchorError` - *The anchor journal cannot be read, appended or verified.*
 
 ---
 
@@ -210,10 +243,42 @@
 
 ---
 
+### [`tests/test_anchor.py`](tests/test_anchor.py)
+> *Anchor record, journal chain and tamper detection tests.*
+
+**Size**: `202` lines (`7787` bytes)
+
+**Classes:**
+- `class AnchorPayloadTests`
+  - Method `.test_payload_is_canonical_json()`
+  - Method `.test_hash_covers_every_field()`
+  - Method `.test_published_anchor_test_vector()`
+- `class AnchorJournalTests`
+  - Method `.setUp()`
+  - Method `._rewrite(transform)`
+  - Method `.test_append_creates_a_contiguous_anchor_chain()`
+  - Method `.test_duplicate_seq_is_allowed()`
+  - Method `.test_seq_cannot_move_backwards()`
+  - Method `.test_head_must_be_a_lowercase_sha256()`
+  - Method `.test_negative_seq_is_refused()`
+  - Method `.test_key_id_is_an_identifier_or_absent()`
+  - Method `.test_created_at_is_normalized()`
+  - Method `.test_tampered_anchor_is_detected()`
+  - Method `.test_deleted_middle_anchor_is_detected()`
+  - Method `.test_unknown_field_is_refused()`
+  - Method `.test_unsupported_schema_is_refused()`
+  - Method `.test_corrupt_tail_refuses_append()`
+  - Method `.test_missing_journal_raises()`
+
+**Functions:**
+- `def _append(journal, seq, head, ledger, key_id, created_at)`
+
+---
+
 ### [`tests/test_cli.py`](tests/test_cli.py)
 > *End-to-end command-line tests through `main`, without spawning processes.*
 
-**Size**: `191` lines (`8515` bytes)
+**Size**: `332` lines (`15579` bytes)
 
 **Classes:**
 - `class CliTests`
@@ -232,6 +297,16 @@
   - Method `.test_missing_key_environment_variable()`
   - Method `.test_signed_round_trip()`
   - Method `.test_demo_writes_evidence()`
+  - Method `.test_anchor_commits_to_the_ledger_head()`
+  - Method `.test_anchor_refuses_a_broken_ledger()`
+  - Method `.test_anchor_refuses_an_empty_ledger()`
+  - Method `.test_anchor_key_id_pairs_with_signing()`
+  - Method `.test_anchor_json_reports_the_record()`
+  - Method `.test_verify_with_anchors_succeeds()`
+  - Method `.test_verify_anchors_detects_tail_truncation()`
+  - Method `.test_verify_anchors_detects_rewritten_chain()`
+  - Method `.test_verify_anchors_detects_tampered_anchor_journal()`
+  - Method `.test_verify_missing_anchors_is_usage_error()`
   - Method `.test_missing_ledger_is_usage_error()`
 
 ---

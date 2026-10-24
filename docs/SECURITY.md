@@ -52,35 +52,81 @@ mac  = 83005ac693ef1c086b7efa336be63fbfc11fe8a16ae50948b4714d89f8ce0272
 The regression suite asserts both values. A third-party verifier can use this vector to check its
 canonical JSON and HMAC implementation before trusting a production pack.
 
+## What the anchor journal proves
+
+For every committed head, Assay stores an anchor in an append-only journal:
+
+```text
+anchor_payload = canonical_json({
+  "schema": 1,
+  "ledger": ledger_name,
+  "seq": seq,
+  "head": ledger_head_hash,
+  "created_at": iso_utc_timestamp,
+  "key_id": key_id_or_null,
+  "prev": prev_anchor_hash,
+})
+anchor_hash = sha256(anchor_payload)
+```
+
+The genesis `prev` is 64 zero characters. Each anchor commits to a known ledger sequence number and head hash.
+Verification (`assay verify --anchors FILE`) walks the journal and cross-checks every anchored head against
+the ledger, detecting tail truncation and whole-chain rewrites offline without requiring an external database.
+
+### Published anchor test vector
+
+Anchoring the published event vector at `seq = 0` with genesis `prev = 0000...0000`:
+
+```json
+{
+  "schema": 1,
+  "ledger": "ledger.jsonl",
+  "seq": 0,
+  "head": "05e5bac80adac169419c1d1629545eace7af484da5c80c69be5e2fd42d1b8bcf",
+  "created_at": "2026-10-24T09:00:00Z",
+  "key_id": "ops-2026.10",
+  "prev": "0000000000000000000000000000000000000000000000000000000000000000"
+}
+```
+
+```text
+hash = c01d9febc847ea998dabeef20311b63ab1a90bb17d695c1fd3a53353eafe0143
+```
+
+The regression suite asserts this value.
+
 ## Threats and outcomes
 
-| Threat | Without HMAC | With HMAC and protected key |
-|---|---|---|
-| Accidental edit to one event | Detected by hash mismatch | Detected |
-| Deliberate edit to one event | Detected by hash mismatch | Detected |
-| Deletion of a middle record | Detected by seq/prev mismatch | Detected |
-| Reordering records | Detected by seq/prev mismatch | Detected |
-| Truncation of the tail | **Not detected** by the chain alone | **Not detected** by the chain alone |
-| Rewrite of the entire chain | **Not detected** by the hash chain alone | Detected by HMAC mismatch |
-| Key compromise | n/a | Attacker can forge; rotate and re-anchor |
-| Producer omits an action | Not detectable | Not detectable |
-| Producer lies before recording | Not detectable | Not detectable |
+| Threat | Without HMAC | With HMAC and protected key | With Head Anchors (`--anchors`) |
+|---|---|---|---|
+| Accidental edit to one event | Detected by hash mismatch | Detected | Detected |
+| Deliberate edit to one event | Detected by hash mismatch | Detected | Detected |
+| Deletion of a middle record | Detected by seq/prev mismatch | Detected | Detected |
+| Reordering records | Detected by seq/prev mismatch | Detected | Detected |
+| Truncation of the tail | **Not detected** by the chain alone | **Not detected** by the chain alone | **Detected** (seq exceeds ledger length) |
+| Rewrite of the entire chain | **Not detected** by the hash chain alone | Detected by HMAC mismatch | **Detected** (head hash mismatch) |
+| Key compromise | n/a | Attacker can forge; rotate and re-anchor | Detected if anchored prior to compromise |
+| Producer omits an action | Not detectable | Not detectable | Not detectable |
+| Producer lies before recording | Not detectable | Not detectable | Not detectable |
 
-**Truncation is the important limitation.** A shorter chain is still a valid chain. Publish the
-head to an independent store on a schedule, or store the ledger in WORM media whose retention
-policy prevents deletion, so a reviewer can compare the pack's head with an external commitment.
-Head anchoring is the first enterprise roadmap item.
+**Truncation is the important limitation of an unanchored hash chain.** A shorter chain is still a valid chain.
+Publish the head to an independent anchor journal (`assay anchor`) on a schedule or after key milestones,
+or store the ledger in WORM media whose retention policy prevents deletion. Cross-checking via
+`assay verify --anchors <journal>` verifies that every anchored sequence number and head hash exists in the ledger.
 
-## Key handling
+## Key handling and rotation
 
 - Pass a key only through an environment variable named by `--hmac-key-env`. Never put a key in
-  `argv`, a policy file or the ledger.
+  `argv`, a policy file, or the ledger.
 - Use at least 16 random bytes. A 32-byte random key encoded as hex or base64 is a reasonable
   starting point.
 - Keep the key outside the agent's write scope. The agent should be able to append events; it
   should not be able to read the verification key.
-- Record the key identifier and rotation date in your operations runbook. The current format has
-  no key id, so plan rotations at ledger boundaries in this version.
+- Key identifiers: When anchoring a signed ledger, `--key-id <ID>` is required alongside `--hmac-key-env`.
+  Key identifiers use 1-64 characters matching `^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$` (e.g. `ops-2026.10`).
+- Key rotation: Plan key rotations at ledger or periodic anchor boundaries. When rotating keys,
+  publish a new anchor with the updated `--key-id`. Historical anchor records preserve the predecessor key ID
+  without storing secret material.
 - Verification without the key still validates the chain. It reports `signed: true` and
   `key_checked: false`; do not present that as signature verification.
 

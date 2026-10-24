@@ -115,11 +115,22 @@ Every line is validated before the first event is appended.
 
 ```bash
 python -m assay verify --ledger .assay/ledger.jsonl
+python -m assay verify --ledger .assay/ledger.jsonl --anchors .assay/anchors.jsonl
 python -m assay verify --ledger .assay/ledger.jsonl --json
 ```
 
-Exit code 0 means the chain is contiguous and every hash matches. Exit code 1 means the evidence
-failed verification; the output names the first bad line. A missing ledger is a usage error (2).
+Exit code 0 means the chain is contiguous and every hash matches. With `--anchors`, it also confirms
+every anchored head is present in the ledger, catching tail truncation and rewrites. Exit code 1 means
+the evidence failed verification; the output names the bad lines. A missing ledger is a usage error (2).
+
+### Anchor
+
+```bash
+python -m assay anchor --ledger .assay/ledger.jsonl --anchors .assay/anchors.jsonl
+```
+
+Commits the current verified ledger head to an append-only anchor journal. When signing is enabled,
+pass `--key-id <ID>` alongside `--hmac-key-env` to bind key rotation identifiers to the commitment.
 
 ### Review against a policy
 
@@ -235,6 +246,7 @@ rights, operational connectors, policy content, assurance and support. See
 
 ```text
 assay/
+├── anchor.py    head commitment and journal verification
 ├── cli.py       command surface and exit-code contract
 ├── demo.py      treasury-agent scenario
 ├── errors.py    Error/Why/Fix failures
@@ -260,7 +272,7 @@ missing amounts, evidence packs, CLI exit codes, generic and MCP ingestion, and 
 
 ## Roadmap
 
-1. Head anchoring to an external append-only store, with a key-id and rotation format.
+1. Head anchoring to an external append-only store, with a key-id and rotation format (shipped in `assay anchor` and `assay verify --anchors`).
 2. Adapters for MCP servers, LangGraph, CrewAI and the OpenAI Agents SDK.
 3. Policy pack library for payments, production change, customer-data export and support agents.
 4. Retention and WORM connectors for S3-compatible stores and enterprise evidence vaults.

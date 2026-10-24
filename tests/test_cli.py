@@ -10,6 +10,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+from assay.anchor import AnchorJournal
 from assay.cli import main
 
 
@@ -180,6 +181,146 @@ class CliTests(unittest.TestCase):
         self.assertTrue(Path(payload["evidence_json"]).is_file())
         pack = json.loads(Path(payload["evidence_json"]).read_text(encoding="utf-8"))
         self.assertEqual(pack["summary"]["policy_coverage"]["matching"], 5)
+
+    def test_anchor_commits_to_the_ledger_head(self):
+        self._record()
+        self._record("shell.exec")
+        anchors = self.root / "anchors.jsonl"
+        code, out, _ = self._run("anchor", "--ledger", self.ledger, "--anchors", anchors)
+        self.assertEqual(code, 0)
+        self.assertIn("Anchored seq=1", out)
+        state = AnchorJournal(anchors).inspect()
+        self.assertTrue(state.verification.ok)
+        self.assertEqual(state.records[0]["seq"], 1)
+        self.assertEqual(state.records[0]["ledger"], "ledger.jsonl")
+        last = json.loads(self.ledger.read_text(encoding="utf-8").splitlines()[-1])
+        self.assertEqual(state.records[0]["head"], last["hash"])
+
+    def test_anchor_refuses_a_broken_ledger(self):
+        self._record()
+        lines = self.ledger.read_text(encoding="utf-8").splitlines()
+        record = json.loads(lines[0])
+        record["event"]["action"] = "files.delete"
+        lines[0] = json.dumps(record, sort_keys=True, separators=(",", ":"))
+        self.ledger.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        anchors = self.root / "anchors.jsonl"
+        code, out, _ = self._run("anchor", "--ledger", self.ledger, "--anchors", anchors)
+        self.assertEqual(code, 1)
+        self.assertIn("Ledger FAILED", out)
+        self.assertFalse(anchors.exists())
+
+    def test_anchor_refuses_an_empty_ledger(self):
+        self.ledger.write_text("", encoding="utf-8")
+        anchors = self.root / "anchors.jsonl"
+        code, _, err = self._run("anchor", "--ledger", self.ledger, "--anchors", anchors)
+        self.assertEqual(code, 2)
+        self.assertIn("no records to anchor", err)
+        self.assertFalse(anchors.exists())
+
+    def test_anchor_key_id_pairs_with_signing(self):
+        anchors = self.root / "anchors.jsonl"
+        key = "k" * 32
+        with patch.dict(os.environ, {"ASSAY_TEST_KEY": key}):
+            code, _, _ = self._run("record", "--ledger", self.ledger, "--actor", "agent:a",
+                                   "--action", "files.read", "--hmac-key-env", "ASSAY_TEST_KEY")
+            self.assertEqual(code, 0)
+            code, _, err = self._run("anchor", "--ledger", self.ledger, "--anchors", anchors,
+                                     "--hmac-key-env", "ASSAY_TEST_KEY")
+            self.assertEqual(code, 2)
+            self.assertIn("--key-id", err)
+            code, _, err = self._run("anchor", "--ledger", self.ledger, "--anchors", anchors,
+                                     "--hmac-key-env", "ASSAY_TEST_KEY", "--key-id", "ops-2026.10")
+            self.assertEqual(code, 0)
+        self.assertEqual(AnchorJournal(anchors).inspect().records[0]["key_id"], "ops-2026.10")
+        other = self.root / "other.jsonl"
+        code, _, err = self._run("anchor", "--ledger", self.ledger, "--anchors", other,
+                                 "--key-id", "ops-2026.10")
+        self.assertEqual(code, 2)
+        self.assertIn("--hmac-key-env", err)
+
+    def test_anchor_json_reports_the_record(self):
+        self._record()
+        anchors = self.root / "anchors.jsonl"
+        code, out, _ = self._run("anchor", "--ledger", self.ledger, "--anchors", anchors, "--json")
+        self.assertEqual(code, 0)
+        payload = json.loads(out)
+        self.assertEqual(payload["seq"], 0)
+        self.assertEqual(len(payload["hash"]), 64)
+        self.assertEqual(payload["schema"], 1)
+
+    def test_verify_with_anchors_succeeds(self):
+        self._record()
+        self._record("shell.exec")
+        anchors = self.root / "anchors.jsonl"
+        code, _, _ = self._run("anchor", "--ledger", self.ledger, "--anchors", anchors)
+        self.assertEqual(code, 0)
+        code, out, _ = self._run("verify", "--ledger", self.ledger, "--anchors", anchors)
+        self.assertEqual(code, 0)
+        self.assertIn("Ledger OK", out)
+        self.assertIn("Anchors OK: 1 anchor(s) verified", out)
+        code, out, _ = self._run("verify", "--ledger", self.ledger, "--anchors", anchors, "--json")
+        self.assertEqual(code, 0)
+        payload = json.loads(out)
+        self.assertTrue(payload["ok"])
+        self.assertEqual(payload["anchors"], 1)
+        self.assertEqual(payload["errors"], [])
+
+    def test_verify_anchors_detects_tail_truncation(self):
+        self._record()
+        self._record("shell.exec")
+        self._record("payments.transfer")
+        anchors = self.root / "anchors.jsonl"
+        code, _, _ = self._run("anchor", "--ledger", self.ledger, "--anchors", anchors)
+        self.assertEqual(code, 0)
+        # Truncate to first 2 lines
+        lines = self.ledger.read_text(encoding="utf-8").splitlines()
+        self.ledger.write_text("\n".join(lines[:2]) + "\n", encoding="utf-8")
+        # Without anchors, it passes because 2 records are a valid prefix
+        code_without, _, _ = self._run("verify", "--ledger", self.ledger)
+        self.assertEqual(code_without, 0)
+        # With anchors, truncation is detected
+        code, out, _ = self._run("verify", "--ledger", self.ledger, "--anchors", anchors)
+        self.assertEqual(code, 1)
+        self.assertIn("Ledger FAILED", out)
+        self.assertIn("tail truncated", out)
+
+    def test_verify_anchors_detects_rewritten_chain(self):
+        self._record()
+        anchors = self.root / "anchors.jsonl"
+        code, _, _ = self._run("anchor", "--ledger", self.ledger, "--anchors", anchors)
+        self.assertEqual(code, 0)
+        # Rewrite the ledger with a different valid record at seq 0
+        self.ledger.unlink()
+        self._record("different.action")
+        # Without anchors, the rewritten ledger alone verifies fine
+        code_without, _, _ = self._run("verify", "--ledger", self.ledger)
+        self.assertEqual(code_without, 0)
+        # With anchors, the head mismatch is caught
+        code, out, _ = self._run("verify", "--ledger", self.ledger, "--anchors", anchors)
+        self.assertEqual(code, 1)
+        self.assertIn("Ledger FAILED", out)
+        self.assertIn("does not match ledger record hash", out)
+
+    def test_verify_anchors_detects_tampered_anchor_journal(self):
+        self._record()
+        anchors = self.root / "anchors.jsonl"
+        code, _, _ = self._run("anchor", "--ledger", self.ledger, "--anchors", anchors)
+        self.assertEqual(code, 0)
+        # Tamper with the anchor journal line
+        data = json.loads(anchors.read_text(encoding="utf-8").splitlines()[0])
+        data["head"] = "f" * 64
+        anchors.write_text(json.dumps(data) + "\n", encoding="utf-8")
+        code, out, _ = self._run("verify", "--ledger", self.ledger, "--anchors", anchors)
+        self.assertEqual(code, 1)
+        self.assertIn("Ledger FAILED", out)
+        self.assertIn("Anchor journal error", out)
+
+    def test_verify_missing_anchors_is_usage_error(self):
+        self._record()
+        code, _, err = self._run("verify", "--ledger", self.ledger,
+                                 "--anchors", self.root / "missing.jsonl")
+        self.assertEqual(code, 2)
+        self.assertIn("does not exist", err)
 
     def test_missing_ledger_is_usage_error(self):
         code, _, err = self._run("verify", "--ledger", self.root / "missing.jsonl")

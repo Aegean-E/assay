@@ -62,3 +62,18 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
   recording, verification or reporting path.
 - **Consequences**: Some conveniences (Ed25519, SQLite indexing, cloud storage adapters) move to
   optional enterprise components or later versions. The core remains auditable in one sitting.
+
+### ADR-006: Head anchoring journal with key identification and rotation format
+- **Date**: 2026-10-24
+- **Status**: Accepted
+- **Context**: Hash chains alone cannot detect tail truncation or a full rewrite. Operators need to
+  anchor the head seq and hash to an independent append-only journal, with a key ID for HMAC
+  rotation without exposing secrets.
+- **Decision**: Introduce `AnchorJournal` and the `assay anchor` command. Store canonical JSON records
+  with `schema`, `ledger`, `seq`, `head`, `created_at`, `key_id`, `prev`, and `hash`. Require
+  `--key-id` whenever `--hmac-key-env` is used to bind anchors to key rotation identifiers.
+  `assay verify --anchors FILE` validates that every anchored head matches the ledger and refuses
+  truncated tails or rewritten chains.
+- **Consequences**: Truncation and rewrites are detectable offline with the standard library. Anchor
+  files are append-only and independently verifiable. Key rotations do not break verification history.
+
