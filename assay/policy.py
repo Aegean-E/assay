@@ -305,6 +305,8 @@ def load_pack(name: str) -> Policy:
     pack_name = name.strip()
     if pack_name.startswith("pack:"):
         pack_name = pack_name[5:]
+    if pack_name.endswith(".json"):
+        pack_name = pack_name[:-5]
     path = PACKS_DIR / f"{pack_name}.json"
     if not path.is_file():
         available = list_packs()

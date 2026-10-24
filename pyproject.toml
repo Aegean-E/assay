@@ -30,4 +30,4 @@ assay = "assay.cli:entry"
 include = ["assay*"]
 
 [tool.setuptools.package-data]
-assay = ["py.typed"]
+assay = ["py.typed", "packs/*.json"]

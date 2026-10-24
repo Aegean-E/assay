@@ -219,7 +219,9 @@ class PolicyPackTests(unittest.TestCase):
     def test_load_policy_pack_resolution(self):
         p1 = load_policy("pack:payments")
         p2 = load_policy("payments")
+        p3 = load_pack("payments.json")
         self.assertEqual(p1.digest, p2.digest)
+        self.assertEqual(p1.digest, p3.digest)
         self.assertEqual(p1.name, "payments-guardrail")
 
     def test_unknown_pack_raises_validation_error(self):

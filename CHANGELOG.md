@@ -3,6 +3,21 @@
 All notable changes to Assay are documented here. The format follows Keep a Changelog and the
 project uses semantic versioning.
 
+## [Unreleased]
+
+### Added
+
+- Head anchoring journal (`assay.anchor`, `assay anchor`) committing ledger head hashes to an append-only journal.
+- Offline cross-verification (`assay verify --anchors <journal>`) catching tail truncation and whole-chain rewrites.
+- Mandatory `--key-id` pairing with `--hmac-key-env` to track key rotations without leaking credentials.
+- Published anchor test vector and updated threat model in `docs/SECURITY.md`.
+- Zero-dependency framework adapters (`assay.adapters`) for MCP JSON-RPC, OpenAI tool calls, LangGraph/LangChain telemetry, and CrewAI actions.
+- Multi-framework stream ingestion via `assay ingest --format <generic|mcp|openai|langgraph|crewai>`.
+- Curated guardrail policy packs (`assay.packs`) for `payments`, `production_change`, `customer_data`, and `support_agent`.
+- Direct `pack:<name>` policy resolution across all policy-aware CLI commands and Python APIs.
+- CLI policy inspection commands (`assay policy list` and `assay policy show`).
+- Architecture Decision Records ADR-006, ADR-007, and ADR-008 in `.aikit/decisions.md`.
+
 ## [0.1.0] - 2026-10-23
 
 ### Added

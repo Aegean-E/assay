@@ -10,7 +10,7 @@
 - **Total Classes**: `37`
 - **Total Top-Level Functions**: `79`
 - **Total Class Methods**: `169`
-- **Total Source Lines**: `4003`
+- **Total Source Lines**: `4007`
 
 ---
 
@@ -198,7 +198,7 @@
 ### [`assay/policy.py`](assay/policy.py)
 > *Declarative agent policy evaluation and retrospective findings.*
 
-**Size**: `380` lines (`15102` bytes)
+**Size**: `382` lines (`15173` bytes)
 
 **Classes:**
 - `class Rule` - *One first-match policy rule; `*` is the only glob supported in `action`.*
@@ -455,7 +455,7 @@
 ### [`tests/test_policy.py`](tests/test_policy.py)
 > *Policy parsing, matching and finding tests.*
 
-**Size**: `272` lines (`11548` bytes)
+**Size**: `274` lines (`11635` bytes)
 
 **Classes:**
 - `class PolicyEvaluationTests`
