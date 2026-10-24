@@ -1,5 +1,7 @@
 # Assay
 
+[![Built with AIKit](https://img.shields.io/badge/built%20with-AIKit-6f42c1)](https://github.com/Aegean-E/AIKit)
+
 **Tamper-evident audit evidence for AI agents.**
 
 Assay turns agent tool calls into a hash-chained evidence ledger and a self-contained pack that
