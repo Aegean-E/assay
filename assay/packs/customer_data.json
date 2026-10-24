@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "name": "customer-data-guardrail",
+  "default": "allow",
+  "rules": [
+    {
+      "id": "block-export-credentials",
+      "action": "data.export_secrets",
+      "effect": "deny"
+    },
+    {
+      "id": "bulk-export-ceiling",
+      "action": "data.export",
+      "effect": "deny",
+      "amount_over": 10000
+    },
+    {
+      "id": "approve-gdpr-deletion",
+      "action": "data.delete_subject",
+      "effect": "require_approval"
+    },
+    {
+      "id": "approve-bulk-export",
+      "action": "data.export",
+      "effect": "require_approval",
+      "amount_over": 500
+    },
+    {
+      "id": "approve-cross-region-sync",
+      "action": "data.replicate",
+      "effect": "require_approval",
+      "metadata": {
+        "cross_region": true
+      }
+    }
+  ]
+}

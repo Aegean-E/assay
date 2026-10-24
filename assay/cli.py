@@ -17,7 +17,15 @@ from .demo import run_demo
 from .errors import AnchorError, AssayError, LedgerError, ValidationError
 from .ledger import Ledger, LedgerState
 from .model import OUTCOMES, Event, normalize_timestamp
-from .policy import Finding, Policy, drift_findings, load_policy, review_events
+from .policy import (
+    Finding,
+    Policy,
+    drift_findings,
+    list_packs,
+    load_pack,
+    load_policy,
+    review_events,
+)
 from .report import build_pack, render_markdown, write_report
 from .version import VERSION
 
@@ -44,7 +52,7 @@ def _add_ledger(parser: argparse.ArgumentParser) -> None:
 
 
 def _add_policy(parser: argparse.ArgumentParser) -> None:
-    parser.add_argument("--policy", type=Path, help="policy JSON file")
+    parser.add_argument("--policy", help="policy JSON file or built-in pack (e.g. pack:payments)")
 
 
 def build_parser() -> Parser:
@@ -114,6 +122,18 @@ def build_parser() -> Parser:
     demo.add_argument("--out", type=Path, help="directory for demo artefacts (default: temp)")
     demo.add_argument("--json", action="store_true", help="print a machine-readable summary")
     demo.set_defaults(handler=_cmd_demo)
+
+    policy_parser = commands.add_parser("policy", help="inspect built-in guardrail policy packs")
+    policy_sub = policy_parser.add_subparsers(dest="policy_command", required=True)
+
+    policy_list = policy_sub.add_parser("list", help="list available policy packs")
+    policy_list.add_argument("--json", action="store_true", help="output packs as JSON")
+    policy_list.set_defaults(handler=_cmd_policy_list)
+
+    policy_show = policy_sub.add_parser("show", help="display details of a policy pack or file")
+    policy_show.add_argument("name", help="policy pack name (e.g. payments) or path to JSON file")
+    policy_show.add_argument("--json", action="store_true", help="output canonical JSON")
+    policy_show.set_defaults(handler=_cmd_policy_show)
     return parser
 
 
@@ -410,6 +430,50 @@ def _cmd_demo(args: argparse.Namespace) -> int:
         print(f"Evidence: {result.markdown_path}")
         print(f"          {result.json_path}")
     return 0 if result.state.verification.ok else 1
+
+
+def _cmd_policy_list(args: argparse.Namespace) -> int:
+    packs = list_packs()
+    if args.json:
+        result = []
+        for name in packs:
+            p = load_pack(name)
+            result.append({
+                "pack": name,
+                "name": p.name,
+                "digest": p.digest,
+                "rules": len(p.rules),
+                "default": p.default,
+            })
+        print(json.dumps(result, indent=2, sort_keys=True))
+    else:
+        print(f"Available policy packs ({len(packs)}):")
+        for name in packs:
+            p = load_pack(name)
+            print(f"  - {name:<20} {p.name:<30} ({len(p.rules)} rules, digest: {p.digest[:12]}...)")
+    return 0
+
+
+def _cmd_policy_show(args: argparse.Namespace) -> int:
+    policy = load_policy(args.name)
+    if args.json:
+        print(json.dumps(policy.to_dict(), indent=2, sort_keys=True))
+    else:
+        print(f"Policy: {policy.name}")
+        print(f"Digest: {policy.digest}")
+        print(f"Default: {policy.default}")
+        print(f"Rules ({len(policy.rules)}):")
+        for rule in policy.rules:
+            details = []
+            if rule.amount_over is not None:
+                details.append(f"amount > {rule.amount_over:g}")
+            if rule.amount_under is not None:
+                details.append(f"amount < {rule.amount_under:g}")
+            if rule.metadata:
+                details.append(f"metadata={json.dumps(dict(rule.metadata), sort_keys=True)}")
+            suffix = f" ({', '.join(details)})" if details else ""
+            print(f"  - [{rule.effect:<16}] {rule.id:<26} action={rule.action}{suffix}")
+    return 0
 
 
 def _report_error(error: AssayError) -> int:

@@ -91,4 +91,19 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
   violating ADR-005 (zero runtime dependencies). Developers can pipe telemetry directly to
   the CLI or call `adapt_event` in code.
 
+### ADR-008: Curated policy pack library and pack resolution
+- **Date**: 2026-10-24
+- **Status**: Accepted
+- **Context**: Compliance and risk teams evaluating agent systems need ready-to-use guardrail
+  policies for common regulated workflows (payments, infrastructure changes, customer PII data,
+  and support operations). Writing JSON policy rules from scratch creates friction and leads to
+  inconsistent rule definitions across organizations.
+- **Decision**: Ship curated, version-controlled policy packs inside the package (`assay/packs/`)
+  covering `payments`, `production_change`, `customer_data`, and `support_agent`. Enable direct
+  resolution via `pack:<name>` or bare name across all policy-aware CLI commands and Python APIs.
+  Introduce `assay policy list` and `assay policy show` for offline pack inspection.
+- **Consequences**: Evaluators can evaluate live agent traces against enterprise guardrails in
+  seconds. Packs are self-contained, canonical JSON documents with deterministic SHA-256 digests.
+
+
 

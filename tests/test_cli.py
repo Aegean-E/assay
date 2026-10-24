@@ -383,6 +383,34 @@ class CliTests(unittest.TestCase):
         self.assertEqual(code, 2)
         self.assertIn("does not exist", err)
 
+    def test_policy_list_cli(self):
+        code, out, _ = self._run("policy", "list")
+        self.assertEqual(code, 0)
+        self.assertIn("payments", out)
+        self.assertIn("production_change", out)
+        code, out, _ = self._run("policy", "list", "--json")
+        self.assertEqual(code, 0)
+        packs = json.loads(out)
+        self.assertIsInstance(packs, list)
+        self.assertTrue(any(p["pack"] == "payments" for p in packs))
+
+    def test_policy_show_cli(self):
+        code, out, _ = self._run("policy", "show", "payments")
+        self.assertEqual(code, 0)
+        self.assertIn("payments-guardrail", out)
+        self.assertIn("Rules", out)
+        code, out, _ = self._run("policy", "show", "payments", "--json")
+        self.assertEqual(code, 0)
+        policy_data = json.loads(out)
+        self.assertEqual(policy_data["name"], "payments-guardrail")
+        self.assertEqual(policy_data["schema"], 1)
+
+    def test_review_with_policy_pack_reference(self):
+        self._record(action="payments.transfer", metadata='{"amount": 15000}')
+        code, out, _ = self._run("review", "--ledger", self.ledger, "--policy", "pack:payments")
+        self.assertEqual(code, 1)
+        self.assertIn("approve-high-transfers", out)
+
 
 if __name__ == "__main__":
     unittest.main()

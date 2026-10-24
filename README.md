@@ -142,11 +142,26 @@ pass `--key-id <ID>` alongside `--hmac-key-env` to bind key rotation identifiers
 ### Review against a policy
 
 ```bash
+python -m assay review --ledger .assay/ledger.jsonl --policy pack:payments
 python -m assay review --ledger .assay/ledger.jsonl --policy examples/policy.json
 ```
 
 Exit code 0 means the chain is valid and no findings were raised. Exit code 1 means a verification
-failure or at least one finding. Use `--json` for a machine-readable result.
+failure or at least one finding. Use `--json` for a machine-readable result. Built-in packs can be
+referenced with `pack:<name>` or by name.
+
+### Policy packs
+
+```bash
+python -m assay policy list
+python -m assay policy show payments
+```
+
+Available curated packs:
+- `payments`: transfer caps, crypto restrictions, human approval thresholds.
+- `production_change`: database drops, prod shell execution, deployment approvals.
+- `customer_data`: credential export blocks, bulk export caps, GDPR deletion approvals.
+- `support_agent`: credential reset blocks, refund thresholds, ownership transfers.
 
 ### Write an evidence pack
 
@@ -260,6 +275,7 @@ assay/
 ├── errors.py    Error/Why/Fix failures
 ├── ledger.py    append, inspect, hash chain and HMAC verification
 ├── model.py     event contract and canonical JSON
+├── packs/       built-in policy packs (payments, prod change, data, support)
 ├── policy.py    rule matching, first-match evaluation and findings
 ├── report.py    self-contained Markdown and JSON evidence packs
 ├── storage.py   fsynced append and atomic text writes
@@ -276,13 +292,13 @@ python -m unittest discover -s tests -t .
 
 The suite covers canonical serialization, event validation, chain construction, tampered records,
 deleted records, malformed lines, HMAC signing, policy first-match and threshold semantics,
-missing amounts, evidence packs, CLI exit codes, framework adapters (OpenAI, LangGraph, CrewAI, MCP), and the demo.
+policy pack loading, missing amounts, evidence packs, CLI exit codes, framework adapters (OpenAI, LangGraph, CrewAI, MCP), and the demo.
 
 ## Roadmap
 
 1. Head anchoring to an external append-only store, with a key-id and rotation format (shipped in `assay anchor` and `assay verify --anchors`).
 2. Adapters for MCP servers, LangGraph, CrewAI and the OpenAI Agents SDK (shipped in `assay.adapters` and `assay ingest --format`).
-3. Policy pack library for payments, production change, customer-data export and support agents.
+3. Policy pack library for payments, production change, customer-data export and support agents (shipped in `assay.packs` and `assay policy list/show`).
 4. Retention and WORM connectors for S3-compatible stores and enterprise evidence vaults.
 5. Redaction workflow and PII minimization profiles.
 6. A published verification specification with cross-language test vectors.

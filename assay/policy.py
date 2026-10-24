@@ -8,7 +8,7 @@ import json
 import math
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple, Union
 
 from .errors import ValidationError
 from .model import Event, canonical_bytes
@@ -290,8 +290,43 @@ def parse_policy(value: Any) -> Policy:
     return Policy(name.strip(), default, rules, digest)
 
 
-def load_policy(path: Path) -> Policy:
-    """Read and validate a policy file with an actionable failure triad."""
+PACKS_DIR = Path(__file__).parent / "packs"
+
+
+def list_packs() -> List[str]:
+    """List available built-in policy pack names."""
+    if not PACKS_DIR.is_dir():
+        return []
+    return sorted(p.stem for p in PACKS_DIR.glob("*.json"))
+
+
+def load_pack(name: str) -> Policy:
+    """Load a built-in policy pack by name with an actionable failure triad."""
+    pack_name = name.strip()
+    if pack_name.startswith("pack:"):
+        pack_name = pack_name[5:]
+    path = PACKS_DIR / f"{pack_name}.json"
+    if not path.is_file():
+        available = list_packs()
+        raise ValidationError(
+            f"Unknown policy pack '{name}'.",
+            f"available policy packs are: {', '.join(available)}.",
+            f"select one of the available packs ({', '.join(available)}) or provide a path to a JSON file.",
+        )
+    return load_policy(path)
+
+
+def load_policy(target: Union[Path, str]) -> Policy:
+    """Read and validate a policy file or built-in pack with an actionable failure triad."""
+    if isinstance(target, str):
+        cleaned = target.strip()
+        if cleaned.startswith("pack:"):
+            return load_pack(cleaned[5:])
+        path = Path(cleaned)
+        if not path.is_file() and (PACKS_DIR / f"{cleaned}.json").is_file():
+            return load_pack(cleaned)
+    else:
+        path = Path(target)
     try:
         text = path.read_text(encoding="utf-8")
     except (OSError, UnicodeError) as exc:

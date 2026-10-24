@@ -8,7 +8,14 @@ from pathlib import Path
 
 from assay.errors import ValidationError
 from assay.model import Event
-from assay.policy import drift_findings, load_policy, parse_policy, review_events
+from assay.policy import (
+    drift_findings,
+    list_packs,
+    load_pack,
+    load_policy,
+    parse_policy,
+    review_events,
+)
 
 
 def _event(action="payments.transfer", **metadata):
@@ -192,6 +199,73 @@ class PolicyReviewTests(unittest.TestCase):
         policy = parse_policy(_document())
         event = Event.create("agent:a", "files.read", ts="2026-10-23T09:00:00Z")
         self.assertEqual(review_events(policy, [{"seq": 0, "event": event.to_dict()}]), [])
+
+
+class PolicyPackTests(unittest.TestCase):
+    def test_list_packs(self):
+        packs = list_packs()
+        self.assertIn("payments", packs)
+        self.assertIn("production_change", packs)
+        self.assertIn("customer_data", packs)
+        self.assertIn("support_agent", packs)
+
+    def test_load_all_built_in_packs(self):
+        for name in list_packs():
+            pack = load_pack(name)
+            self.assertTrue(pack.name)
+            self.assertEqual(len(pack.digest), 64)
+            self.assertGreater(len(pack.rules), 0)
+
+    def test_load_policy_pack_resolution(self):
+        p1 = load_policy("pack:payments")
+        p2 = load_policy("payments")
+        self.assertEqual(p1.digest, p2.digest)
+        self.assertEqual(p1.name, "payments-guardrail")
+
+    def test_unknown_pack_raises_validation_error(self):
+        with self.assertRaises(ValidationError) as ctx:
+            load_pack("nonexistent_domain")
+        self.assertIn("available policy packs are", ctx.exception.why)
+
+    def test_payments_pack_rules(self):
+        policy = load_pack("payments")
+        # Crypto denied
+        self.assertEqual(policy.evaluate(_event("payments.crypto.transfer")).effect, "deny")
+        # Shell denied
+        self.assertEqual(policy.evaluate(_event("shell.exec")).effect, "deny")
+        # High transfer requires approval
+        self.assertEqual(policy.evaluate(_event("payments.transfer", amount=6000)).effect, "require_approval")
+        # Excessive transfer denied
+        self.assertEqual(policy.evaluate(_event("payments.transfer", amount=60000)).effect, "deny")
+        # Normal transfer allowed
+        self.assertEqual(policy.evaluate(_event("payments.transfer", amount=100)).effect, "allow")
+
+    def test_production_change_pack_rules(self):
+        policy = load_pack("production_change")
+        # Drop db denied
+        self.assertEqual(policy.evaluate(_event("db.drop_database")).effect, "deny")
+        # Prod shell denied
+        self.assertEqual(policy.evaluate(_event("shell.exec", env="prod")).effect, "deny")
+        # Prod migrate requires approval
+        self.assertEqual(policy.evaluate(_event("db.migrate", env="prod")).effect, "require_approval")
+
+    def test_customer_data_pack_rules(self):
+        policy = load_pack("customer_data")
+        # Export secrets denied
+        self.assertEqual(policy.evaluate(_event("data.export_secrets")).effect, "deny")
+        # Bulk export requires approval
+        self.assertEqual(policy.evaluate(_event("data.export", amount=1000)).effect, "require_approval")
+        # GDPR deletion requires approval
+        self.assertEqual(policy.evaluate(_event("data.delete_subject")).effect, "require_approval")
+
+    def test_support_agent_pack_rules(self):
+        policy = load_pack("support_agent")
+        # Auth override denied
+        self.assertEqual(policy.evaluate(_event("auth.override_credentials")).effect, "deny")
+        # Refund requires approval
+        self.assertEqual(policy.evaluate(_event("billing.refund", amount=75)).effect, "require_approval")
+        # Excessive refund denied
+        self.assertEqual(policy.evaluate(_event("billing.refund", amount=1000)).effect, "deny")
 
 
 if __name__ == "__main__":

@@ -6,11 +6,11 @@
 ---
 
 ## 📊 Codebase Metrics
-- **Total Python Modules**: `22`
-- **Total Classes**: `36`
-- **Total Top-Level Functions**: `75`
-- **Total Class Methods**: `158`
-- **Total Source Lines**: `3799`
+- **Total Python Modules**: `23`
+- **Total Classes**: `37`
+- **Total Top-Level Functions**: `79`
+- **Total Class Methods**: `169`
+- **Total Source Lines**: `4003`
 
 ---
 
@@ -19,7 +19,7 @@
 ### [`assay/__init__.py`](assay/__init__.py)
 > *Assay: tamper-evident audit evidence for AI agents.*
 
-**Size**: `37` lines (`741` bytes)
+**Size**: `39` lines (`799` bytes)
 
 ---
 
@@ -82,7 +82,7 @@
 ### [`assay/cli.py`](assay/cli.py)
 > *Command-line interface for recording, verifying and reviewing agent evidence.*
 
-**Size**: `441` lines (`18667` bytes)
+**Size**: `505` lines (`21139` bytes)
 
 **Classes:**
 - `class Parser` - *Turn argument errors into the Assay triad instead of an unlabelled usage dump.*
@@ -107,6 +107,8 @@
 - `def _cmd_review(args)`
 - `def _cmd_report(args)`
 - `def _cmd_demo(args)`
+- `def _cmd_policy_list(args)`
+- `def _cmd_policy_show(args)`
 - `def _report_error(error)`
 - `def main(argv)` - *Parse arguments, run one command and return 0, 1 or 2.*
 - `def entry()` - *Console-script entry point.*
@@ -186,10 +188,17 @@
 
 ---
 
+### [`assay/packs/__init__.py`](assay/packs/__init__.py)
+> *Curated guardrail policy packs for enterprise AI agent operations.*
+
+**Size**: `1` lines (`73` bytes)
+
+---
+
 ### [`assay/policy.py`](assay/policy.py)
 > *Declarative agent policy evaluation and retrospective findings.*
 
-**Size**: `345` lines (`13879` bytes)
+**Size**: `380` lines (`15102` bytes)
 
 **Classes:**
 - `class Rule` - *One first-match policy rule; `*` is the only glob supported in `action`.*
@@ -209,7 +218,9 @@
 - `def _finite(value, name)`
 - `def _parse_rule(value, position)`
 - `def parse_policy(value)` - *Validate a decoded policy document and compute its digest.*
-- `def load_policy(path)` - *Read and validate a policy file with an actionable failure triad.*
+- `def list_packs()` - *List available built-in policy pack names.*
+- `def load_pack(name)` - *Load a built-in policy pack by name with an actionable failure triad.*
+- `def load_policy(target)` - *Read and validate a policy file or built-in pack with an actionable failure triad.*
 - `def review_events(policy, records)` - *Evaluate every stored event, attaching its ledger sequence to each finding.*
 - `def drift_findings(policy, records)` - *Flag events recorded under a different policy digest than the one under review.*
 
@@ -329,7 +340,7 @@
 ### [`tests/test_cli.py`](tests/test_cli.py)
 > *End-to-end command-line tests through `main`, without spawning processes.*
 
-**Size**: `388` lines (`18053` bytes)
+**Size**: `416` lines (`19302` bytes)
 
 **Classes:**
 - `class CliTests`
@@ -362,6 +373,9 @@
   - Method `.test_verify_anchors_detects_tampered_anchor_journal()`
   - Method `.test_verify_missing_anchors_is_usage_error()`
   - Method `.test_missing_ledger_is_usage_error()`
+  - Method `.test_policy_list_cli()`
+  - Method `.test_policy_show_cli()`
+  - Method `.test_review_with_policy_pack_reference()`
 
 ---
 
@@ -441,7 +455,7 @@
 ### [`tests/test_policy.py`](tests/test_policy.py)
 > *Policy parsing, matching and finding tests.*
 
-**Size**: `198` lines (`8319` bytes)
+**Size**: `272` lines (`11548` bytes)
 
 **Classes:**
 - `class PolicyEvaluationTests`
@@ -465,6 +479,15 @@
   - Method `.test_review_events_attaches_sequence()`
   - Method `.test_drift_findings()`
   - Method `.test_no_findings_for_compliant_records()`
+- `class PolicyPackTests`
+  - Method `.test_list_packs()`
+  - Method `.test_load_all_built_in_packs()`
+  - Method `.test_load_policy_pack_resolution()`
+  - Method `.test_unknown_pack_raises_validation_error()`
+  - Method `.test_payments_pack_rules()`
+  - Method `.test_production_change_pack_rules()`
+  - Method `.test_customer_data_pack_rules()`
+  - Method `.test_support_agent_pack_rules()`
 
 **Functions:**
 - `def _event(action, **metadata)`

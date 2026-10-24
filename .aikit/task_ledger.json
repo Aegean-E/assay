@@ -1,12 +1,12 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "assay-adapters-v1",
+    "task_id": "assay-policies-v1",
     "last_phase": "phase 4",
     "active_phase": 5,
     "status": "completed",
-    "updated_at": 1792831694.5551112,
-    "completed_at": 1792831699.058351
+    "updated_at": 1792832164.2931077,
+    "completed_at": 1792832170.101877
   },
   "checkpoints": [
     {
@@ -160,6 +160,41 @@
       "status": "completed",
       "timestamp": 1792831699.0583527,
       "timestamp_str": "2026-10-24 11:48:19"
+    },
+    {
+      "task_id": "assay-policies-v1",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/4] Policy packs: create assay/packs/ with payments, production_change, customer_data, support_agent. [2/4] Policy resolution engine: list_packs, load_pack, and 'pack:<name>' resolution in assay/policy.py. [3/4] CLI policy command: 'assay policy list' and 'assay policy show', plus pack support in review/record/report. [4/4] Tests & docs: test_packs in test_policy.py and test_cli.py, ADR-008, README roadmap & examples, Phase 4 gates.",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792831877.693904,
+      "timestamp_str": "2026-10-24 11:51:17",
+      "impact_assessment": {
+        "why": "Regulated buyers need turn-key guardrail policies for payments, infrastructure, customer data, and support agents without authoring complex rule JSON from scratch.",
+        "benefits": "Instant policy evaluation for 4 major enterprise agent domains; 'pack:<name>' syntax across all CLI commands; zero runtime dependencies.",
+        "risks": "contract: new 'policy' CLI subcommand and 'pack:<name>' path resolution in load_policy; dependency: none (standard library only); concurrency: read-only policy resources; state: deterministic canonical digests",
+        "mitigation": "Deterministic JSON formatting; strict validation against policy schema 1; regression assertions for each pack's canonical digest; Phase 4 gates"
+      }
+    },
+    {
+      "task_id": "assay-policies-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[4/4] Curated policy packs, pack resolution, CLI policy commands, ADR-008; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792832164.2931077,
+      "timestamp_str": "2026-10-24 11:56:04"
+    },
+    {
+      "task_id": "assay-policies-v1",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'assay-policies-v1' completed successfully.",
+      "status": "completed",
+      "timestamp": 1792832170.1018786,
+      "timestamp_str": "2026-10-24 11:56:10"
     }
   ]
 }

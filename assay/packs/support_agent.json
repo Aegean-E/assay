@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "name": "support-agent-guardrail",
+  "default": "allow",
+  "rules": [
+    {
+      "id": "block-auth-override",
+      "action": "auth.override_credentials",
+      "effect": "deny"
+    },
+    {
+      "id": "refund-hard-cap",
+      "action": "billing.refund",
+      "effect": "deny",
+      "amount_over": 500
+    },
+    {
+      "id": "approve-refund",
+      "action": "billing.refund",
+      "effect": "require_approval",
+      "amount_over": 50
+    },
+    {
+      "id": "approve-plan-override",
+      "action": "billing.override_plan",
+      "effect": "require_approval"
+    },
+    {
+      "id": "approve-owner-transfer",
+      "action": "account.transfer_ownership",
+      "effect": "require_approval"
+    }
+  ]
+}

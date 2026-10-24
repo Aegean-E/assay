@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "name": "production-change-guardrail",
+  "default": "allow",
+  "rules": [
+    {
+      "id": "block-drop-database",
+      "action": "db.drop_*",
+      "effect": "deny"
+    },
+    {
+      "id": "block-prod-shell",
+      "action": "shell.exec",
+      "effect": "deny",
+      "metadata": {
+        "env": "prod"
+      }
+    },
+    {
+      "id": "approve-prod-migrations",
+      "action": "db.migrate",
+      "effect": "require_approval",
+      "metadata": {
+        "env": "prod"
+      }
+    },
+    {
+      "id": "approve-prod-deploy",
+      "action": "deploy.*",
+      "effect": "require_approval",
+      "metadata": {
+        "env": "prod"
+      }
+    },
+    {
+      "id": "approve-security-groups",
+      "action": "cloud.security_group.*",
+      "effect": "require_approval"
+    }
+  ]
+}

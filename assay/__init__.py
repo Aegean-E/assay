@@ -13,7 +13,7 @@ from .adapters import (
 from .anchor import Anchor, AnchorJournal
 from .ledger import Ledger
 from .model import Event
-from .policy import Policy, load_policy, parse_policy
+from .policy import Policy, list_packs, load_pack, load_policy, parse_policy
 from .version import VERSION
 
 __version__ = VERSION
@@ -28,6 +28,8 @@ __all__ = [
     "crewai_event",
     "generic_event",
     "langgraph_event",
+    "list_packs",
+    "load_pack",
     "load_policy",
     "mcp_event",
     "openai_event",
