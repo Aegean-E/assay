@@ -104,11 +104,18 @@ record is flushed and fsynced before the command returns.
 
 ```bash
 python -m assay ingest --file examples/events.jsonl --policy examples/policy.json
+cat mcp.jsonl | python -m assay ingest --format mcp --actor agent:mcp
+python -m assay ingest --file openai.jsonl --format openai --actor agent:assistant
+python -m assay ingest --file langgraph.jsonl --format langgraph
+python -m assay ingest --file crewai.jsonl --format crewai
 ```
 
-`--format generic` accepts `actor`/`agent`, `action`/`tool`/`name`, `outcome`/`status`,
-`target`/`resource`, `metadata`/`arguments`/`input` and `ts`/`timestamp`/`time`.
-`--format mcp` accepts JSON-RPC `tools/call` records and uses `--actor` as the session fallback.
+Supported formats:
+- `generic`: standard JSON objects with `actor`/`agent`, `action`/`tool`, `outcome`, `metadata`.
+- `mcp`: Model Context Protocol JSON-RPC `tools/call` records with session `--actor` fallback.
+- `openai`: OpenAI tool calls (`function.name`, `arguments`, `tool_call_id`).
+- `langgraph`: LangChain/LangGraph events (`on_tool_end`, `ToolMessage`, node actions).
+- `crewai`: CrewAI task and tool telemetry (`agent`, `tool`, `tool_input`, `result`).
 Every line is validated before the first event is appended.
 
 ### Verify
@@ -246,6 +253,7 @@ rights, operational connectors, policy content, assurance and support. See
 
 ```text
 assay/
+├── adapters.py  framework transformers (MCP, OpenAI, LangGraph, CrewAI)
 ├── anchor.py    head commitment and journal verification
 ├── cli.py       command surface and exit-code contract
 ├── demo.py      treasury-agent scenario
@@ -268,12 +276,12 @@ python -m unittest discover -s tests -t .
 
 The suite covers canonical serialization, event validation, chain construction, tampered records,
 deleted records, malformed lines, HMAC signing, policy first-match and threshold semantics,
-missing amounts, evidence packs, CLI exit codes, generic and MCP ingestion, and the demo.
+missing amounts, evidence packs, CLI exit codes, framework adapters (OpenAI, LangGraph, CrewAI, MCP), and the demo.
 
 ## Roadmap
 
 1. Head anchoring to an external append-only store, with a key-id and rotation format (shipped in `assay anchor` and `assay verify --anchors`).
-2. Adapters for MCP servers, LangGraph, CrewAI and the OpenAI Agents SDK.
+2. Adapters for MCP servers, LangGraph, CrewAI and the OpenAI Agents SDK (shipped in `assay.adapters` and `assay ingest --format`).
 3. Policy pack library for payments, production change, customer-data export and support agents.
 4. Retention and WORM connectors for S3-compatible stores and enterprise evidence vaults.
 5. Redaction workflow and PII minimization profiles.

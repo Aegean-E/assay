@@ -1,12 +1,12 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "assay-anchors-v1",
+    "task_id": "assay-adapters-v1",
     "last_phase": "phase 4",
     "active_phase": 5,
     "status": "completed",
-    "updated_at": 1792831088.0474548,
-    "completed_at": 1792831126.525604
+    "updated_at": 1792831694.5551112,
+    "completed_at": 1792831699.058351
   },
   "checkpoints": [
     {
@@ -125,6 +125,41 @@
       "status": "completed",
       "timestamp": 1792831126.5256057,
       "timestamp_str": "2026-10-24 11:38:46"
+    },
+    {
+      "task_id": "assay-adapters-v1",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/4] Core adapter layer: assay/adapters.py with pure standard-library transformers for MCP, OpenAI, LangGraph, and CrewAI schemas. [2/4] CLI integration: expand 'assay ingest --format' with openai, langgraph, crewai in assay/cli.py. [3/4] Tests & fixtures: test_adapters.py with fixture streams for each framework, edge cases, malformed inputs. [4/4] ADR-007, documentation guides, export in __init__.py, Phase 4 gates.",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792831409.65769,
+      "timestamp_str": "2026-10-24 11:43:29",
+      "impact_assessment": {
+        "why": "Agent frameworks (OpenAI, LangGraph, CrewAI, MCP) emit distinct event telemetry; native adapters eliminate custom glue code and standardize evidence fields.",
+        "benefits": "Zero-dependency ingestion for top 4 agent ecosystems via CLI flags and Python helpers; enables 5-line evidence recording.",
+        "risks": "contract: new adapters module and CLI choices; dependency: none (standard library only); concurrency: stateless transformers; state: creates standard Event records without ledger schema changes",
+        "mitigation": "Duck-typing dictionary inputs with schema validation; failing-first tests across framework sample outputs; strict AST and Phase 4 gates"
+      }
+    },
+    {
+      "task_id": "assay-adapters-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[4/4] Agent framework adapters (OpenAI, LangGraph, CrewAI, MCP), CLI ingest formats, ADR-007, documentation; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792831694.5551112,
+      "timestamp_str": "2026-10-24 11:48:14"
+    },
+    {
+      "task_id": "assay-adapters-v1",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'assay-adapters-v1' completed successfully.",
+      "status": "completed",
+      "timestamp": 1792831699.0583527,
+      "timestamp_str": "2026-10-24 11:48:19"
     }
   ]
 }

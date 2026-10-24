@@ -6,11 +6,11 @@
 ---
 
 ## 📊 Codebase Metrics
-- **Total Python Modules**: `20`
-- **Total Classes**: `30`
-- **Total Top-Level Functions**: `68`
-- **Total Class Methods**: `135`
-- **Total Source Lines**: `3245`
+- **Total Python Modules**: `22`
+- **Total Classes**: `36`
+- **Total Top-Level Functions**: `75`
+- **Total Class Methods**: `158`
+- **Total Source Lines**: `3799`
 
 ---
 
@@ -19,7 +19,7 @@
 ### [`assay/__init__.py`](assay/__init__.py)
 > *Assay: tamper-evident audit evidence for AI agents.*
 
-**Size**: `9` lines (`303` bytes)
+**Size**: `37` lines (`741` bytes)
 
 ---
 
@@ -27,6 +27,24 @@
 > *Allow `python -m assay` to run the command line.*
 
 **Size**: `6` lines (`119` bytes)
+
+---
+
+### [`assay/adapters.py`](assay/adapters.py)
+> *Adapters that transform event telemetry from major agent frameworks into Assay events.*
+
+**Size**: `318` lines (`13926` bytes)
+
+**Functions:**
+- `def _value(row, *names, default)`
+- `def _as_dict(value)`
+- `def generic_event(row, actor_default, policy_ref)` - *Transform standard generic JSON into an Assay Event.*
+- `def mcp_event(row, actor_default, policy_ref)` - *Transform Model Context Protocol (MCP) JSON-RPC messages into an Event.*
+- `def openai_event(row, actor_default, policy_ref)` - *Transform OpenAI tool calls and assistant execution telemetry into an Event.*
+- `def langgraph_event(row, actor_default, policy_ref)` - *Transform LangChain and LangGraph node/tool event records into an Event.*
+- `def crewai_event(row, actor_default, policy_ref)` - *Transform CrewAI tool execution and agent action dictionaries into an Event.*
+- `def adapt_event(format_name, row, actor_default, policy_ref)` - *Transform a dictionary from a named framework into an Event.*
+- `def parse_event_stream(text, format_name, actor_default, policy_ref)` - *Parse JSONL stream using the selected framework adapter.*
 
 ---
 
@@ -64,7 +82,7 @@
 ### [`assay/cli.py`](assay/cli.py)
 > *Command-line interface for recording, verifying and reviewing agent evidence.*
 
-**Size**: `537` lines (`22738` bytes)
+**Size**: `441` lines (`18667` bytes)
 
 **Classes:**
 - `class Parser` - *Turn argument errors into the Assay triad instead of an unlabelled usage dump.*
@@ -80,8 +98,6 @@
 - `def _policy_reference(policy)`
 - `def _cmd_record(args)`
 - `def _value(row, *names, default)`
-- `def _generic_event(row, actor_default, policy_ref)`
-- `def _mcp_event(row, actor_default, policy_ref)`
 - `def _read_source(path_text)`
 - `def _parse_ingest(text, input_format, actor, policy_ref)`
 - `def _cmd_ingest(args)`
@@ -243,6 +259,41 @@
 
 ---
 
+### [`tests/test_adapters.py`](tests/test_adapters.py)
+> *Agent framework adapter tests for MCP, OpenAI, LangGraph, and CrewAI.*
+
+**Size**: `248` lines (`8720` bytes)
+
+**Classes:**
+- `class GenericAdapterTests`
+  - Method `.test_standard_keys()`
+  - Method `.test_alternate_field_names()`
+  - Method `.test_missing_actor_raises()`
+  - Method `.test_actor_fallback()`
+- `class McpAdapterTests`
+  - Method `.test_tools_call_event()`
+  - Method `.test_non_tool_call_returns_none()`
+  - Method `.test_error_result()`
+- `class OpenAiAdapterTests`
+  - Method `.test_tool_call_with_string_arguments()`
+  - Method `.test_tool_call_with_dict_arguments()`
+  - Method `.test_chat_completion_tool_call_item()`
+  - Method `.test_error_status()`
+- `class LangGraphAdapterTests`
+  - Method `.test_on_tool_end_event()`
+  - Method `.test_tool_message_format()`
+  - Method `.test_node_execution_format()`
+  - Method `.test_error_event()`
+- `class CrewAiAdapterTests`
+  - Method `.test_agent_tool_execution()`
+  - Method `.test_action_input_format()`
+- `class AdapterDispatcherTests`
+  - Method `.test_known_adapters()`
+  - Method `.test_unknown_format_raises()`
+  - Method `.test_parse_event_stream()`
+
+---
+
 ### [`tests/test_anchor.py`](tests/test_anchor.py)
 > *Anchor record, journal chain and tamper detection tests.*
 
@@ -278,7 +329,7 @@
 ### [`tests/test_cli.py`](tests/test_cli.py)
 > *End-to-end command-line tests through `main`, without spawning processes.*
 
-**Size**: `332` lines (`15579` bytes)
+**Size**: `388` lines (`18053` bytes)
 
 **Classes:**
 - `class CliTests`
@@ -292,6 +343,9 @@
   - Method `.test_report_writes_markdown_and_json()`
   - Method `.test_ingest_generic()`
   - Method `.test_ingest_mcp()`
+  - Method `.test_ingest_openai()`
+  - Method `.test_ingest_langgraph()`
+  - Method `.test_ingest_crewai()`
   - Method `.test_ingest_validates_before_writing()`
   - Method `.test_usage_error_uses_triad()`
   - Method `.test_missing_key_environment_variable()`

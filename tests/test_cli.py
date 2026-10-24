@@ -126,6 +126,62 @@ class CliTests(unittest.TestCase):
         self.assertEqual(records[0]["event"]["actor"], "agent:mcp")
         self.assertEqual(records[1]["event"]["outcome"], "error")
 
+    def test_ingest_openai(self):
+        source = self.root / "openai.jsonl"
+        source.write_text(
+            json.dumps({
+                "id": "call_1",
+                "type": "function",
+                "function": {"name": "transact", "arguments": '{"amount": 100}'},
+            }) + "\n",
+            encoding="utf-8",
+        )
+        code, _, _ = self._run("ingest", "--ledger", self.ledger, "--file", source,
+                               "--format", "openai", "--actor", "agent:openai")
+        self.assertEqual(code, 0)
+        record = json.loads(self.ledger.read_text(encoding="utf-8").splitlines()[0])["event"]
+        self.assertEqual(record["actor"], "agent:openai")
+        self.assertEqual(record["action"], "transact")
+        self.assertEqual(record["metadata"]["amount"], 100)
+
+    def test_ingest_langgraph(self):
+        source = self.root / "langgraph.jsonl"
+        source.write_text(
+            json.dumps({
+                "event": "on_tool_end",
+                "name": "lookup_customer",
+                "data": {"input": {"id": "c_42"}, "output": "VIP"},
+                "actor": "agent:graph",
+            }) + "\n",
+            encoding="utf-8",
+        )
+        code, _, _ = self._run("ingest", "--ledger", self.ledger, "--file", source,
+                               "--format", "langgraph")
+        self.assertEqual(code, 0)
+        record = json.loads(self.ledger.read_text(encoding="utf-8").splitlines()[0])["event"]
+        self.assertEqual(record["actor"], "agent:graph")
+        self.assertEqual(record["action"], "lookup_customer")
+        self.assertEqual(record["metadata"]["id"], "c_42")
+
+    def test_ingest_crewai(self):
+        source = self.root / "crewai.jsonl"
+        source.write_text(
+            json.dumps({
+                "agent": "Audit Specialist",
+                "tool": "verify_balance",
+                "tool_input": {"account": "acct_99"},
+                "result": "verified",
+            }) + "\n",
+            encoding="utf-8",
+        )
+        code, _, _ = self._run("ingest", "--ledger", self.ledger, "--file", source,
+                               "--format", "crewai")
+        self.assertEqual(code, 0)
+        record = json.loads(self.ledger.read_text(encoding="utf-8").splitlines()[0])["event"]
+        self.assertEqual(record["actor"], "Audit Specialist")
+        self.assertEqual(record["action"], "verify_balance")
+        self.assertEqual(record["metadata"]["account"], "acct_99")
+
     def test_ingest_validates_before_writing(self):
         source = self.root / "events.jsonl"
         source.write_text(

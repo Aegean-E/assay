@@ -77,3 +77,18 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Consequences**: Truncation and rewrites are detectable offline with the standard library. Anchor
   files are append-only and independently verifiable. Key rotations do not break verification history.
 
+### ADR-007: Zero-dependency agent framework adapters
+- **Date**: 2026-10-24
+- **Status**: Accepted
+- **Context**: Autonomous agents built on MCP, OpenAI Agents SDK, LangGraph, or CrewAI emit
+  heterogeneous event structures. Requiring developer teams to install heavy SDK dependencies
+  inside Assay or write manual transformation glue slows adoption and introduces supply-chain risk.
+- **Decision**: Ship pure standard-library adapters in `assay.adapters` that transform JSON-RPC
+  and dictionary telemetry from MCP, OpenAI, LangGraph, and CrewAI into canonical `Event` records.
+  Support stream ingestion via `assay ingest --format <name>` with session actor fallbacks.
+  Duck-type dictionary payloads without requiring runtime SDK packages.
+- **Consequences**: Assay integrates out-of-the-box with the top 4 agent ecosystems without
+  violating ADR-005 (zero runtime dependencies). Developers can pipe telemetry directly to
+  the CLI or call `adapt_event` in code.
+
+

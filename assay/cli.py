@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from . import anchor as anchor_module
+from .adapters import parse_event_stream
 from .anchor import AnchorJournal
 from .demo import run_demo
 from .errors import AnchorError, AssayError, LedgerError, ValidationError
@@ -69,7 +70,8 @@ def build_parser() -> Parser:
 
     ingest = commands.add_parser("ingest", help="append events from a JSONL stream")
     ingest.add_argument("--file", default="-", help="JSONL file, or - for stdin")
-    ingest.add_argument("--format", dest="input_format", choices=("generic", "mcp"),
+    ingest.add_argument("--format", dest="input_format",
+                        choices=("generic", "mcp", "openai", "langgraph", "crewai"),
                         default="generic", help="adapter for the incoming records")
     ingest.add_argument("--actor", help="fallback actor when a record omits one")
     _add_policy(ingest)
@@ -205,74 +207,6 @@ def _value(row: Mapping[str, Any], *names: str, default: Any = None) -> Any:
     return default
 
 
-def _generic_event(row: Mapping[str, Any], actor_default: Optional[str],
-                   policy_ref: Optional[Dict[str, str]]) -> Event:
-    actor = _value(row, "actor", "agent", "actor_id", default=actor_default)
-    action = _value(row, "action", "tool", "name")
-    if not isinstance(actor, str) or not actor.strip():
-        raise ValidationError(
-            "An ingested record has no actor.",
-            "every action must name the agent or principal that performed it.",
-            "add an actor field or pass --actor as the fallback.",
-        )
-    if not isinstance(action, str) or not action.strip():
-        raise ValidationError(
-            "An ingested record has no action or tool name.",
-            "a record without an action cannot be audited or matched by a policy.",
-            "add action/tool/name, or fix the producer mapping.",
-        )
-    raw_outcome = _value(row, "outcome", "status", default="success")
-    outcome = raw_outcome.lower() if isinstance(raw_outcome, str) else "success"
-    if outcome not in OUTCOMES:
-        outcome = "success"
-    metadata = _value(row, "metadata", "arguments", "input", default={})
-    ts = _value(row, "ts", "timestamp", "time")
-    return Event.create(
-        actor, action,
-        outcome=outcome,
-        target=_value(row, "target", "resource", "destination", default=""),
-        metadata=metadata,
-        policy=policy_ref,
-        **({"ts": normalize_timestamp(ts)} if ts is not None else {}),
-    )
-
-
-def _mcp_event(row: Mapping[str, Any], actor_default: Optional[str],
-               policy_ref: Optional[Dict[str, str]]) -> Optional[Event]:
-    method = row.get("method")
-    if method is not None and method != "tools/call":
-        return None
-    params = row.get("params")
-    params = params if isinstance(params, Mapping) else {}
-    action = params.get("name") or row.get("tool")
-    if not isinstance(action, str) or not action.strip():
-        raise ValidationError(
-            "An MCP tools/call record has no tool name.",
-            "the tool name is the audited action.",
-            "fix the producer or use --format generic with an explicit mapping.",
-        )
-    actor = _value(row, "actor", "agent", default=actor_default)
-    if not isinstance(actor, str) or not actor.strip():
-        raise ValidationError(
-            "An MCP record has no actor.",
-            "tool calls need a principal, even when the server log omits one.",
-            "pass --actor for the session.",
-        )
-    result = row.get("result")
-    outcome = "error" if isinstance(result, Mapping) and result.get("isError") else "success"
-    metadata = params.get("arguments")
-    if not isinstance(metadata, Mapping):
-        metadata = {}
-    ts = _value(row, "ts", "timestamp", "time")
-    return Event.create(
-        actor, action,
-        outcome=outcome,
-        metadata=dict(metadata),
-        policy=policy_ref,
-        **({"ts": normalize_timestamp(ts)} if ts is not None else {}),
-    )
-
-
 def _read_source(path_text: str) -> str:
     if path_text == "-":
         return sys.stdin.read()
@@ -289,37 +223,7 @@ def _read_source(path_text: str) -> str:
 
 def _parse_ingest(text: str, input_format: str, actor: Optional[str],
                   policy_ref: Optional[Dict[str, str]]) -> List[Event]:
-    events: List[Event] = []
-    for number, line in enumerate(text.splitlines(), start=1):
-        if not line.strip():
-            continue
-        try:
-            row = json.loads(line)
-        except json.JSONDecodeError as exc:
-            raise ValidationError(
-                f"Input line {number} is not valid JSON: {exc.msg}.",
-                "the whole file is validated before any event is appended.",
-                "fix the producer output and retry; nothing was written.",
-            ) from exc
-        if not isinstance(row, Mapping):
-            raise ValidationError(
-                f"Input line {number} is not a JSON object.",
-                "each JSONL line must describe one action.",
-                "fix the producer output and retry; nothing was written.",
-            )
-        if input_format == "mcp":
-            event = _mcp_event(row, actor, policy_ref)
-        else:
-            event = _generic_event(row, actor, policy_ref)
-        if event is not None:
-            events.append(event)
-    if not events:
-        raise ValidationError(
-            "No events were found in the input.",
-            "an empty ingest would produce an empty evidence trail.",
-            "check the file and adapter, then retry.",
-        )
-    return events
+    return parse_event_stream(text, input_format, actor_default=actor, policy_ref=policy_ref)
 
 
 def _cmd_ingest(args: argparse.Namespace) -> int:
