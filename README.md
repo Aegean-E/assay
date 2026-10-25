@@ -317,6 +317,7 @@ assay/
 ├── CONTRIBUTING.md
 ├── LICENSE
 ├── README.md
+├── COMMERCIAL.md
 ├── SECURITY.md
 ├── assay/                    <- package source
 ├── docs/                     <- business, compliance, launch and security notes
