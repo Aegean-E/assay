@@ -339,7 +339,7 @@ Development rules, the test command and contribution licensing are in
 15-minute demo script, launch narrative, buyer questions and security-questionnaire answers are in
 [docs/LAUNCH.md](docs/LAUNCH.md).
 
-> **License history:** versions released before `v0.1.0-agpl` remain available under GNU AGPL-3.0.
+> **License history:** versions up to and including `v0.1.0-agpl` remain available under GNU AGPL-3.0.
 
 ## 📜 License
 

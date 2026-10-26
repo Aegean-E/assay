@@ -2,7 +2,7 @@
 
 > This project is free for personal use under the **Aegean License 1.1 (AL-1.1)** in [LICENSE](LICENSE). Every commercial or
 > organizational use needs the paid **Aegean Commercial License 1.0 (ACL-1.0)**.
-> Versions released before `v0.1.0-agpl` remain available under GNU AGPL-3.0.
+> Versions up to and including `v0.1.0-agpl` remain available under GNU AGPL-3.0.
 
 ---
 
@@ -15,5 +15,5 @@
 | **Restricted** | Projects withdrawn from distribution | All Rights Reserved notice from a recorded cutoff | Not offered publicly |
 
 The binding text is [LICENSE](LICENSE); the commercial agreement is
-[ACL-1.0](https://github.com/AegeanWorks/aegean-licensing/blob/main/licenses/ACL-1.0.md).
+[ACL-1.0](https://github.com/AegeanWorks/Aegean-Licensing/blob/master/licenses/ACL-1.0.md).
 Contact `aegean-licensing@proton.me`.
