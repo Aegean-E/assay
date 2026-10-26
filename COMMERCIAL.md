@@ -1,7 +1,7 @@
 # Aegean Commercial License (ACL-1.0) & Licensing Tiers
 
 > This project is free for personal use under the **Aegean License 1.1 (AL-1.1)** in [LICENSE](LICENSE). Every commercial or
-> organizational use needs the paid **Aegean Commercial License 1.0 (ACL-1.0)**. 
+> organizational use needs the paid **Aegean Commercial License 1.0 (ACL-1.0)**.
 > Versions released before `v0.1.0-agpl` remain available under GNU AGPL-3.0.
 
 ---
