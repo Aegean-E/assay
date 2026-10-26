@@ -41,9 +41,9 @@ database to migrate.
 
 ## Contribution licensing
 
-Contributions are accepted under AGPL-3.0-or-later, the license of this project. Because Assay is
-also offered under a commercial license, the maintainer may require a contributor license
-agreement before merging a substantial contribution. Open an issue before starting a large change
+Contributions are accepted under the Aegean License 1.1 (AL-1.1), the license of this project.
+Because Assay is also offered under the Aegean Commercial License 1.0 (ACL-1.0), the maintainer
+may require a contributor license agreement before merging a substantial contribution. Open an issue before starting a large change
 so the licensing and design questions are settled first.
 
 ## Commit messages

@@ -41,23 +41,23 @@ $20/month tracing tool.
 
 | Tier | Price hypothesis | What the buyer gets |
 |---|---:|---|
-| Community | free | AGPL-3.0 core: record, ingest, verify, policy review, evidence packs, CLI and library |
+| Community | free for personal use | AL-1.1 core: record, ingest, verify, policy review, evidence packs, CLI and library |
 | Team | $12k-$24k / year | Commercial license for embedding, policy pack library, priority issues, upgrade guidance |
 | Enterprise (roadmap) | $60k-$150k / year | SSO, retention and WORM connectors, key-custody integration, signed head anchoring, private deployment, SLA |
 | Design partner | $15k / 6 months | Roadmap influence, two compliance use cases, joint reference pack, named support |
 | Readiness service | $15k-$30k | Two-week evidence gap assessment, policy and retention design, auditor-ready sample pack |
 
-The commercial license is for companies that cannot accept AGPL obligations because they embed
-Assay in a closed product or distribute it with a proprietary appliance. The verifier and the
-open format stay free. That is both the trust story and the distribution strategy.
+Every company or organizational use, including internal self-hosting, needs the Aegean Commercial
+License 1.0 (ACL-1.0); one 28-day non-production evaluation per company group is free. The source,
+the verifier and the documented format stay public. That is both the trust story and the
+distribution strategy.
 
-## Why AGPL-3.0
+## Why AL-1.1
 
 - Compliance buyers can inspect the integrity rules instead of trusting a vendor's badge.
-- A cloud provider cannot take the core, close it and sell it back without contributing or
-  buying a commercial license.
-- Companies that only self-host internally can use the community edition at no cost, which keeps
-  adoption friction low.
+- Any commercial use, including a cloud provider reselling the core, needs a commercial license.
+- Individuals and evaluating companies try it at no cost: personal use is free, and each company
+  group gets one 28-day non-production evaluation, which keeps adoption friction low.
 - The paid surface is operational: retention, identity, key custody, policy content, support and
   assurance. None of it requires hiding the verification algorithm.
 
@@ -107,7 +107,7 @@ policy packs, integrations and trust built around them are.
 
 | Risk | Mitigation |
 |---|---|
-| Cloud observability vendors bundle "audit" features | Win on local-first ownership, offline verification and AGPL trust; integrate rather than compete on dashboards |
+| Cloud observability vendors bundle "audit" features | Win on local-first ownership, offline verification and source-available trust; integrate rather than compete on dashboards |
 | Buyers treat a hash chain as a silver bullet | Publish the threat model, truncation limitation, key custody guidance and anchoring roadmap |
 | Legal review rejects compliance claims | Never claim certification; use "supports evidence for" and partner with counsel/auditors |
 | PII accumulates in evidence metadata | Provide minimization guidance and a redaction workflow; keep encryption-at-rest in the enterprise tier |

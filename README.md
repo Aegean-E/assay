@@ -339,8 +339,6 @@ Development rules, the test command and contribution licensing are in
 15-minute demo script, launch narrative, buyer questions and security-questionnaire answers are in
 [docs/LAUNCH.md](docs/LAUNCH.md).
 
-> **License history:** versions up to and including `v0.1.0-agpl` remain available under GNU AGPL-3.0.
-
 ## 📜 License
 
 Free for personal use under the Aegean License 1.1 (AL-1.1); see [LICENSE](LICENSE). Any commercial use needs the Aegean Commercial License 1.0 (ACL-1.0); see [COMMERCIAL.md](COMMERCIAL.md).

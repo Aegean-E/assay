@@ -7,7 +7,7 @@ project uses semantic versioning.
 
 ### Changed
 
-- Relicensed new versions under Aegean License 1.1 (AL-1.1); versions at or before `v0.1.0-agpl` remain AGPL-3.0.
+- New versions are licensed under Aegean License 1.1 (AL-1.1).
 - Bumped the version to 0.2.0.
 
 ### Added
@@ -35,7 +35,7 @@ project uses semantic versioning.
 - `record`, `ingest` (generic and MCP), `verify`, `review`, `report` and `demo` commands.
 - Self-contained JSON evidence packs and reviewer-oriented Markdown packs with policy rules.
 - A verified five-event treasury-agent demo that produces two findings.
-- AGPL-3.0-or-later licensing, packaging, console script, Windows/POSIX/macOS launchers and a
+- Licensing, packaging, console script, Windows/POSIX/macOS launchers and a
   three-OS CI matrix.
 - Business brief, compliance mapping, threat model, launch/sales kit and contribution/security
   policies.

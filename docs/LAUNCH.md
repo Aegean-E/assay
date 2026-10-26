@@ -13,7 +13,7 @@ that authorised it. When a customer, auditor or insurer asks what happened, a tr
 not a defensible answer.
 
 Assay is a local-first evidence layer: a hash-chained ledger, a policy review, and a
-self-contained pack that anyone can verify offline. AGPL-3.0 core. Five-minute demo. No account.
+self-contained pack that anyone can verify offline. Source-available AL-1.1 core. Five-minute demo. No account.
 
 ## Fifteen-minute demo script
 
@@ -39,7 +39,7 @@ them is excellent at showing what happened in a dashboard. It is much worse at p
 a regulated buyer needs after an incident: a record that proves what happened, which policy was in
 force, who approved the exception, and whether the record has been altered.
 
-Today we are releasing Assay, an AGPL-3.0 evidence layer for agent actions. It records tool calls
+Today we are releasing Assay, a source-available evidence layer for agent actions. It records tool calls
 in a hash-chained JSONL ledger, binds events to a policy digest, reviews the trail for denied
 actions and missing approvals, and writes a self-contained evidence pack. Verification is local,
 offline and reproducible. No account, no SaaS dependency, no proprietary evidence format.
@@ -55,9 +55,9 @@ above the cap and a shell command that should never have run. It then writes an 
 a verifier result. Edit a record and run `assay verify` to see the chain fail.
 
 Assay is deliberately narrow. It is not a runtime firewall and not a SIEM. It is the evidence
-artefact you keep when the dashboard is gone. The core is free under the AGPL today; commercial
-licenses, retention/WORM connectors, key custody and support are planned for companies that embed
-it in closed products or need an enterprise operating model.
+artefact you keep when the dashboard is gone. The core is free for personal use under AL-1.1;
+companies use it under the Aegean Commercial License 1.0, with retention/WORM connectors, key
+custody and support planned for those that need an enterprise operating model.
 
 If your team is deploying an agent into a regulated workflow, we would like to run a 30-minute
 evidence gap review on one real action. Bring a sample; we will bring the verifier.
@@ -68,7 +68,7 @@ evidence gap review on one real action. Bring a sample; we will bring the verifi
    independent verification. We built Assay to fix the last mile: `python -m assay demo`."
 2. "A hash chain catches edits. It does not catch a truncated tail or a full rewrite. Assay's
    threat model is public because compliance buyers should know exactly what a control proves."
-3. "The verifier is AGPL and the format is documented. If an auditor cannot reproduce the result
+3. "The verifier source is public and the format is documented. If an auditor cannot reproduce the result
    without your SaaS account, it is not evidence."
 
 ## Cold email
@@ -113,14 +113,14 @@ Subject: One agent action, one evidence pack
 | Audit logging | The evidence ledger is the audit record; access to the storage account should be logged separately |
 | Subprocessors | None in the community edition |
 | Vulnerability disclosure | See `SECURITY.md`; private advisory flow, synthetic reproduction required |
-| License | AGPL-3.0-or-later; commercial license available for embedding and enterprise operations |
+| License | AL-1.1 for personal use; Aegean Commercial License 1.0 (ACL-1.0) for any company use |
 | Compliance claims | Evidence support only; no certification and no legal advice |
 
 ## Objection handling
 
-**"AGPL is a problem for us."**
-Use the community edition internally under the AGPL, or buy a commercial license if you embed or
-distribute it in a closed product. The verifier and format stay open either way.
+**"Do we need a license to try it?"**
+No: each company group gets one 28-day non-production evaluation. Production or other company use
+needs the Aegean Commercial License 1.0. The verifier source and format stay public either way.
 
 **"A hash chain is not tamper-proof."**
 Correct. It detects edits, deletions and reordering. It does not detect truncation or a full
