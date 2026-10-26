@@ -5,6 +5,11 @@ project uses semantic versioning.
 
 ## [Unreleased]
 
+### Changed
+
+- Relicensed new versions under Aegean License 1.1 (AL-1.1); versions at or before `v0.1.0-agpl` remain AGPL-3.0.
+- Bumped the version to 0.2.0.
+
 ### Added
 
 - Head anchoring journal (`assay.anchor`, `assay anchor`) committing ledger head hashes to an append-only journal.

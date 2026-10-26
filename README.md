@@ -1,12 +1,12 @@
 # Assay
 
-[![Built with AIKit](https://img.shields.io/badge/built%20with-AIKit-6f42c1)](https://github.com/Aegean-E/AIKit)
+[![Built with AIKit](https://img.shields.io/badge/built%20with-AIKit-6f42c1)](https://github.com/AegeanWorks/AIKit)
 
 **Tamper-evident audit evidence for AI agents.**
 
 Assay turns agent tool calls into a hash-chained evidence ledger and a self-contained pack that
 an auditor, customer or insurer can verify offline. It is local-first, zero-dependency, and
-licensed **AGPL-3.0-or-later** with a commercial path for companies that embed it in proprietary
+licensed **AL-1.1** with a commercial path for companies that embed it in proprietary
 products.
 
 Most agent tools answer "what did the agent do?" Assay answers the harder questions: was the
@@ -255,7 +255,7 @@ recommended controls and auditor walkthrough are in [docs/COMPLIANCE.md](docs/CO
 
 | Tier | Price hypothesis | What it adds |
 |---|---:|---|
-| Community | free | AGPL-3.0 core: record, ingest, verify, review, evidence packs, CLI and library |
+| Community | free | AL-1.1 core: record, ingest, verify, review, evidence packs, CLI and library |
 | Team | $12k-$24k / year | Commercial license for embedding, policy packs, priority support |
 | Enterprise | $60k-$150k / year | SSO, retention/WORM connectors, key custody, head anchoring, private deployment, SLA |
 | Design partner | $15k / 6 months | Roadmap influence, joint evidence pack, named support |
@@ -316,6 +316,8 @@ assay/
 ├── CHANGELOG.md
 ├── CONTRIBUTING.md
 ├── LICENSE
+├── LICENSES/                 <- REUSE license texts
+├── REUSE.toml                <- Machine-readable SPDX metadata
 ├── README.md
 ├── COMMERCIAL.md
 ├── SECURITY.md
@@ -337,8 +339,8 @@ Development rules, the test command and contribution licensing are in
 15-minute demo script, launch narrative, buyer questions and security-questionnaire answers are in
 [docs/LAUNCH.md](docs/LAUNCH.md).
 
-## License
+> **License history:** versions released before `v0.1.0-agpl` remain available under GNU AGPL-3.0.
 
-GNU Affero General Public License v3.0 or later. See [LICENSE](LICENSE). Commercial licensing is
-available for embedding in proprietary products and for enterprise operations; the open verifier
-and format remain available under the AGPL.
+## 📜 License
+
+Free for personal use under the Aegean License 1.1 (AL-1.1); see [LICENSE](LICENSE). Any commercial use needs the Aegean Commercial License 1.0 (ACL-1.0); see [COMMERCIAL.md](COMMERCIAL.md).

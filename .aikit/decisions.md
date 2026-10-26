@@ -104,6 +104,9 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
   Introduce `assay policy list` and `assay policy show` for offline pack inspection.
 - **Consequences**: Evaluators can evaluate live agent traces against enterprise guardrails in
   seconds. Packs are self-contained, canonical JSON documents with deterministic SHA-256 digests.
+## Licensing migration (v0.1.0-agpl)
 
-
+- New versions use Aegean License 1.1 (AL-1.1); versions at or before `v0.1.0-agpl` remain AGPL-3.0.
+- Rights holder: AegeanWorks; internal AI commit identity `assistant@local`.
+- Counsel review of the 1.1 texts remains pending.
 
