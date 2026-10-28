@@ -1,8 +1,8 @@
 # Assay
 
 <!-- aegean:media:start -->
-<p align="center"><img src="assets/logo.jpg" alt="Assay logo" width="96" height="96"></p>
 <p align="center"><img src="assets/social-preview.png" alt="Assay social preview" width="100%"></p>
+*Brand assets are generated and may not fully represent the project scope.*
 <!-- aegean:media:end -->
 
 [![Built with AIKit](https://img.shields.io/badge/built%20with-AIKit-6f42c1)](https://github.com/AegeanWorks/AIKit)
