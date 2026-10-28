@@ -12,6 +12,9 @@
   "ui_source": "detected",
   "topics": [
     "aikit",
+    "source-available",
+    "aegean-license",
+    "commercial-license",
     "ai-agents",
     "ai-governance",
     "audit",
@@ -21,16 +24,13 @@
     "llm",
     "python",
     "security",
-    "source-available",
     "aegeanworks",
     "ai-safety",
     "cli",
-    "software",
     "supply-chain-security",
     "tamper-evident",
     "audit-trail",
-    "cryptographic-proof",
-    "governance"
+    "cryptographic-proof"
   ],
   "topics_source": "ai:kilo:2026-10-27",
   "topics_reviewed_at": "2026-10-28",
@@ -55,5 +55,10 @@
   ],
   "topics_choice_round4": [
     "governance"
+  ],
+  "license_topics": [
+    "source-available",
+    "aegean-license",
+    "commercial-license"
   ]
 }

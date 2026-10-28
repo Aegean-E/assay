@@ -2,7 +2,6 @@
 
 <!-- aegean:media:start -->
 <p align="center"><img src="assets/social-preview.png" alt="Assay social preview" width="100%"></p>
-*The banner and logo are AI-generated brand assets. They are illustrative and may not literally depict every feature or the full project scope.*
 <!-- aegean:media:end -->
 
 [![Built with AIKit](https://img.shields.io/badge/built%20with-AIKit-6f42c1)](https://github.com/AegeanWorks/AIKit)
@@ -343,6 +342,12 @@ Development rules, the test command and contribution licensing are in
 [SECURITY.md](SECURITY.md); the threat model is in [docs/SECURITY.md](docs/SECURITY.md). The
 15-minute demo script, launch narrative, buyer questions and security-questionnaire answers are in
 [docs/LAUNCH.md](docs/LAUNCH.md).
+
+<!-- aegean:brand-assets:start -->
+## 🎨 Brand Assets
+
+> **AI-Generated Brand Artwork.** The banner and logo are **AI-generated brand assets**. They are illustrative and may not literally depict every feature or the full project scope.
+<!-- aegean:brand-assets:end -->
 
 ## 📜 License
 
