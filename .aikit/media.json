@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "name": "assay",
+  "repo": "Assay",
+  "has_ui": false,
+  "ui_kind": "cli",
+  "palette": [
+    "#0b1220",
+    "#1e293b",
+    "#a78bfa",
+    "#f8fafc"
+  ],
+  "assets": {
+    "logo": {
+      "path": "assets/logo.svg",
+      "status": "approved",
+      "commit": "",
+      "generated_at": "2026-10-28T08:02:21",
+      "review": {
+        "status": "approved",
+        "reviewer": "subagent:vision-review",
+        "method": "vision",
+        "notes": "AS monogram in lavender, dark background, rings balanced.",
+        "score": 93,
+        "reviewed_at": "2026-10-28T08:10:42"
+      }
+    },
+    "social_preview": {
+      "path": "assets/social-preview.svg",
+      "status": "approved",
+      "commit": "",
+      "generated_at": "2026-10-28T08:02:21",
+      "review": {
+        "status": "approved",
+        "reviewer": "subagent:vision-review",
+        "method": "vision",
+        "notes": "AS icon, title, tamper-evident audit description, CLI tag.",
+        "score": 93,
+        "reviewed_at": "2026-10-28T08:10:42"
+      }
+    },
+    "social_preview_png": {
+      "path": "assets/social-preview.png",
+      "status": "pending_review",
+      "commit": "",
+      "generated_at": "2026-10-28T08:02:22",
+      "review": null
+    }
+  },
+  "screenshots": []
+}
