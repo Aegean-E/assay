@@ -12,6 +12,7 @@
   "ui_source": "detected",
   "topics": [
     "aikit",
+    "aikit-integrated",
     "source-available",
     "aegean-license",
     "commercial-license",
@@ -29,8 +30,7 @@
     "cli",
     "supply-chain-security",
     "tamper-evident",
-    "audit-trail",
-    "cryptographic-proof"
+    "audit-trail"
   ],
   "topics_source": "ai:kilo:2026-10-27",
   "topics_reviewed_at": "2026-10-28",
