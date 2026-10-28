@@ -14,40 +14,20 @@
   "layout": "terminal",
   "assets": {
     "logo": {
-      "path": "assets/logo.png",
-      "status": "approved",
-      "commit": "",
-      "generated_at": "2026-10-28T13:53:35",
-      "review": {
-        "status": "approved",
-        "reviewer": "subagent:brand-review",
-        "method": "vision",
-        "notes": "AS monogram badge, AI GOVERNANCE eyebrow, Assay single line, radar/scan background fits governance/audit evidence, no footer, no clipping.",
-        "score": 89,
-        "reviewed_at": "2026-10-28T14:00:01"
-      }
-    },
-    "social_preview": {
-      "path": "assets/social-preview.png",
-      "status": "approved",
-      "commit": "",
-      "generated_at": "2026-10-28T13:53:35",
-      "review": {
-        "status": "approved",
-        "reviewer": "subagent:brand-review",
-        "method": "vision",
-        "notes": "Tagline 'Tamper-evident evidence for AI governance and audit.' complete. Chips (ai agents, ai governance, audit) readable. Ripple imagery fits evidence/audit. Clean hierarchy.",
-        "score": 90,
-        "reviewed_at": "2026-10-28T14:00:01"
-      }
-    },
-    "artwork": {
-      "path": "assets/artwork.jpg",
+      "path": "assets/logo.jpg",
       "status": "pending_review",
       "commit": "",
-      "generated_at": "2026-10-28T13:33:53",
+      "generated_at": "2026-10-28T16:09:46",
+      "review": null
+    },
+    "social_preview": {
+      "path": "assets/social-preview.jpg",
+      "status": "pending_review",
+      "commit": "",
+      "generated_at": "2026-10-28T16:09:46",
       "review": null
     }
   },
-  "screenshots": []
+  "screenshots": [],
+  "model": "community/scriptsnsenses-sys/flux-2-dev-free"
 }
