@@ -9,8 +9,8 @@
       "start": 3,
       "step": 3,
       "stop": null,
-      "stage": 10,
-      "window": 28,
+      "stage": 11,
+      "window": 29,
       "audited_commits": [
         "cf68e45b66d22c441a7fbab5dc5c9e4ab672e588",
         "ec919a95e19d540c48207f6d3d1dc9f089f451c0",
@@ -39,16 +39,18 @@
         "466c69bbd7b406d82843dcaa48cbaade3813c3d3",
         "fb083050680ed21362c3650853574c5ce03fdb6a",
         "17ea5b1e10dcd7d587ad896ac8b6cc7aa0e18eb8",
-        "a37b49f88ac787bf14ceb30ef7143c41efc33a54"
+        "a37b49f88ac787bf14ceb30ef7143c41efc33a54",
+        "c1a774b16bd129e33fd8e6b3355d3b7ce02ef46e"
       ],
       "status": "stopped",
       "created": "2026-10-29T17:11:09",
-      "updated": "2026-10-29T17:20:51",
+      "updated": "2026-10-29T17:25:40",
       "last_audit": {
         "run": "run-1",
-        "stage": 10,
-        "window": 28,
+        "stage": 11,
+        "window": 29,
         "commits": [
+          "c1a774b16bd129e33fd8e6b3355d3b7ce02ef46e",
           "cf68e45b66d22c441a7fbab5dc5c9e4ab672e588",
           "ec919a95e19d540c48207f6d3d1dc9f089f451c0",
           "0e2f069741ac0d859794b6956404f42e85e852b5",
@@ -79,7 +81,7 @@
           "a37b49f88ac787bf14ceb30ef7143c41efc33a54"
         ],
         "new_commits": [
-          "a37b49f88ac787bf14ceb30ef7143c41efc33a54"
+          "c1a774b16bd129e33fd8e6b3355d3b7ce02ef46e"
         ],
         "prior_commits": [
           "cf68e45b66d22c441a7fbab5dc5c9e4ab672e588",
@@ -108,23 +110,28 @@
           "f78ff1db3c7132d13214f3a4ef4d24f94953b6f9",
           "466c69bbd7b406d82843dcaa48cbaade3813c3d3",
           "fb083050680ed21362c3650853574c5ce03fdb6a",
-          "17ea5b1e10dcd7d587ad896ac8b6cc7aa0e18eb8"
+          "17ea5b1e10dcd7d587ad896ac8b6cc7aa0e18eb8",
+          "a37b49f88ac787bf14ceb30ef7143c41efc33a54"
         ],
         "findings": [],
         "repairs": [],
         "counts": {},
-        "reviewed": 5,
+        "reviewed": 9,
         "review": {
           "status": "reviewed",
           "rejected": [],
           "files": [
-            ".aikit/decisions.md",
-            ".aikit/guidelines.md",
+            ".aikit/codebase_map.md",
             ".aikit/project.json",
             ".gitignore",
-            "README.md"
+            "CHANGELOG.md",
+            "README.md",
+            "assay/adapters.py",
+            "assay/ledger.py",
+            "tests/test_adapters.py",
+            "tests/test_ledger.py"
           ],
-          "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\assay\\.aikit\\reforge.reviews\\stage-10-a37b49f88ac7.md",
+          "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\assay\\.aikit\\reforge.reviews\\stage-11-c1a774b16bd1.md",
           "redacted": 0,
           "reason": "the answer held no findings",
           "findings": []
@@ -132,7 +139,7 @@
         "skipped": [],
         "tests": {},
         "gates": {},
-        "timestamp": "2026-10-29T17:20:30"
+        "timestamp": "2026-10-29T17:25:12"
       },
       "history": [
         {
@@ -966,12 +973,108 @@
           "tests": {},
           "gates": {},
           "timestamp": "2026-10-29T17:20:30"
+        },
+        {
+          "run": "run-1",
+          "stage": 11,
+          "window": 29,
+          "commits": [
+            "c1a774b16bd129e33fd8e6b3355d3b7ce02ef46e",
+            "cf68e45b66d22c441a7fbab5dc5c9e4ab672e588",
+            "ec919a95e19d540c48207f6d3d1dc9f089f451c0",
+            "0e2f069741ac0d859794b6956404f42e85e852b5",
+            "ee77f05ffb676fa5f41ae9e5b222078c477a424d",
+            "112215e541b49ce4447a4a01624404c14124b43a",
+            "35215aa2f899149bd885520b482392ac0ce7eaef",
+            "278bbf8e2ebd0ace29085c8c656d86dc718f002b",
+            "62f1a67d20a8a641b4777f966293d0427082215e",
+            "e4f0bd9cac685bf9aef869d215770f59358f7b1f",
+            "7c4872578fb5fefd9012e3661e67b9e07b241f8b",
+            "29c788c84f84cbd17ba517b581b0f76dd3deb633",
+            "b2f74a79d2de5e11eee9dbf72d47ece3e1a4884f",
+            "104669bb40a5f579606305ccabce2dd0ecbaf262",
+            "e318eda8338f2022e1aadb511da241aacc49a427",
+            "1727ab575c72c7b1909e530f2ae2d7f77a27131c",
+            "c760c41d76728c1f7a0f48ad12bc6c3334bdf185",
+            "6122ca8f395c851da6d526a893c89672b7c66073",
+            "6e512d7afb082c29970d3149c6d5ab846c69b055",
+            "5861564174e9dbf930bb1fc2d101bf1558a71bb4",
+            "c8df90282d35731d674ce4d18f626fb5759ea7a0",
+            "8cc519ee4cb9681c6b65e34e513130180c4f7cba",
+            "9249ae42b1650bd877b998ff60b715fab427de49",
+            "5bb35faf5b2f4651985f9af6af94f3340b25177c",
+            "f78ff1db3c7132d13214f3a4ef4d24f94953b6f9",
+            "466c69bbd7b406d82843dcaa48cbaade3813c3d3",
+            "fb083050680ed21362c3650853574c5ce03fdb6a",
+            "17ea5b1e10dcd7d587ad896ac8b6cc7aa0e18eb8",
+            "a37b49f88ac787bf14ceb30ef7143c41efc33a54"
+          ],
+          "new_commits": [
+            "c1a774b16bd129e33fd8e6b3355d3b7ce02ef46e"
+          ],
+          "prior_commits": [
+            "cf68e45b66d22c441a7fbab5dc5c9e4ab672e588",
+            "ec919a95e19d540c48207f6d3d1dc9f089f451c0",
+            "0e2f069741ac0d859794b6956404f42e85e852b5",
+            "ee77f05ffb676fa5f41ae9e5b222078c477a424d",
+            "112215e541b49ce4447a4a01624404c14124b43a",
+            "35215aa2f899149bd885520b482392ac0ce7eaef",
+            "278bbf8e2ebd0ace29085c8c656d86dc718f002b",
+            "62f1a67d20a8a641b4777f966293d0427082215e",
+            "e4f0bd9cac685bf9aef869d215770f59358f7b1f",
+            "7c4872578fb5fefd9012e3661e67b9e07b241f8b",
+            "29c788c84f84cbd17ba517b581b0f76dd3deb633",
+            "b2f74a79d2de5e11eee9dbf72d47ece3e1a4884f",
+            "104669bb40a5f579606305ccabce2dd0ecbaf262",
+            "e318eda8338f2022e1aadb511da241aacc49a427",
+            "1727ab575c72c7b1909e530f2ae2d7f77a27131c",
+            "c760c41d76728c1f7a0f48ad12bc6c3334bdf185",
+            "6122ca8f395c851da6d526a893c89672b7c66073",
+            "6e512d7afb082c29970d3149c6d5ab846c69b055",
+            "5861564174e9dbf930bb1fc2d101bf1558a71bb4",
+            "c8df90282d35731d674ce4d18f626fb5759ea7a0",
+            "8cc519ee4cb9681c6b65e34e513130180c4f7cba",
+            "9249ae42b1650bd877b998ff60b715fab427de49",
+            "5bb35faf5b2f4651985f9af6af94f3340b25177c",
+            "f78ff1db3c7132d13214f3a4ef4d24f94953b6f9",
+            "466c69bbd7b406d82843dcaa48cbaade3813c3d3",
+            "fb083050680ed21362c3650853574c5ce03fdb6a",
+            "17ea5b1e10dcd7d587ad896ac8b6cc7aa0e18eb8",
+            "a37b49f88ac787bf14ceb30ef7143c41efc33a54"
+          ],
+          "findings": [],
+          "repairs": [],
+          "counts": {},
+          "reviewed": 9,
+          "review": {
+            "status": "reviewed",
+            "rejected": [],
+            "files": [
+              ".aikit/codebase_map.md",
+              ".aikit/project.json",
+              ".gitignore",
+              "CHANGELOG.md",
+              "README.md",
+              "assay/adapters.py",
+              "assay/ledger.py",
+              "tests/test_adapters.py",
+              "tests/test_ledger.py"
+            ],
+            "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\assay\\.aikit\\reforge.reviews\\stage-11-c1a774b16bd1.md",
+            "redacted": 0,
+            "reason": "the answer held no findings",
+            "findings": []
+          },
+          "skipped": [],
+          "tests": {},
+          "gates": {},
+          "timestamp": "2026-10-29T17:25:12"
         }
       ]
     }
   ],
-  "stage": 10,
-  "window": 28,
+  "stage": 11,
+  "window": 29,
   "audited_commits": [
     "cf68e45b66d22c441a7fbab5dc5c9e4ab672e588",
     "ec919a95e19d540c48207f6d3d1dc9f089f451c0",
@@ -1000,13 +1103,15 @@
     "466c69bbd7b406d82843dcaa48cbaade3813c3d3",
     "fb083050680ed21362c3650853574c5ce03fdb6a",
     "17ea5b1e10dcd7d587ad896ac8b6cc7aa0e18eb8",
-    "a37b49f88ac787bf14ceb30ef7143c41efc33a54"
+    "a37b49f88ac787bf14ceb30ef7143c41efc33a54",
+    "c1a774b16bd129e33fd8e6b3355d3b7ce02ef46e"
   ],
   "last_audit": {
     "run": "run-1",
-    "stage": 10,
-    "window": 28,
+    "stage": 11,
+    "window": 29,
     "commits": [
+      "c1a774b16bd129e33fd8e6b3355d3b7ce02ef46e",
       "cf68e45b66d22c441a7fbab5dc5c9e4ab672e588",
       "ec919a95e19d540c48207f6d3d1dc9f089f451c0",
       "0e2f069741ac0d859794b6956404f42e85e852b5",
@@ -1037,7 +1142,7 @@
       "a37b49f88ac787bf14ceb30ef7143c41efc33a54"
     ],
     "new_commits": [
-      "a37b49f88ac787bf14ceb30ef7143c41efc33a54"
+      "c1a774b16bd129e33fd8e6b3355d3b7ce02ef46e"
     ],
     "prior_commits": [
       "cf68e45b66d22c441a7fbab5dc5c9e4ab672e588",
@@ -1066,23 +1171,28 @@
       "f78ff1db3c7132d13214f3a4ef4d24f94953b6f9",
       "466c69bbd7b406d82843dcaa48cbaade3813c3d3",
       "fb083050680ed21362c3650853574c5ce03fdb6a",
-      "17ea5b1e10dcd7d587ad896ac8b6cc7aa0e18eb8"
+      "17ea5b1e10dcd7d587ad896ac8b6cc7aa0e18eb8",
+      "a37b49f88ac787bf14ceb30ef7143c41efc33a54"
     ],
     "findings": [],
     "repairs": [],
     "counts": {},
-    "reviewed": 5,
+    "reviewed": 9,
     "review": {
       "status": "reviewed",
       "rejected": [],
       "files": [
-        ".aikit/decisions.md",
-        ".aikit/guidelines.md",
+        ".aikit/codebase_map.md",
         ".aikit/project.json",
         ".gitignore",
-        "README.md"
+        "CHANGELOG.md",
+        "README.md",
+        "assay/adapters.py",
+        "assay/ledger.py",
+        "tests/test_adapters.py",
+        "tests/test_ledger.py"
       ],
-      "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\assay\\.aikit\\reforge.reviews\\stage-10-a37b49f88ac7.md",
+      "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\assay\\.aikit\\reforge.reviews\\stage-11-c1a774b16bd1.md",
       "redacted": 0,
       "reason": "the answer held no findings",
       "findings": []
@@ -1090,7 +1200,7 @@
     "skipped": [],
     "tests": {},
     "gates": {},
-    "timestamp": "2026-10-29T17:20:30"
+    "timestamp": "2026-10-29T17:25:12"
   },
   "history": [
     {
@@ -1924,6 +2034,102 @@
       "tests": {},
       "gates": {},
       "timestamp": "2026-10-29T17:20:30"
+    },
+    {
+      "run": "run-1",
+      "stage": 11,
+      "window": 29,
+      "commits": [
+        "c1a774b16bd129e33fd8e6b3355d3b7ce02ef46e",
+        "cf68e45b66d22c441a7fbab5dc5c9e4ab672e588",
+        "ec919a95e19d540c48207f6d3d1dc9f089f451c0",
+        "0e2f069741ac0d859794b6956404f42e85e852b5",
+        "ee77f05ffb676fa5f41ae9e5b222078c477a424d",
+        "112215e541b49ce4447a4a01624404c14124b43a",
+        "35215aa2f899149bd885520b482392ac0ce7eaef",
+        "278bbf8e2ebd0ace29085c8c656d86dc718f002b",
+        "62f1a67d20a8a641b4777f966293d0427082215e",
+        "e4f0bd9cac685bf9aef869d215770f59358f7b1f",
+        "7c4872578fb5fefd9012e3661e67b9e07b241f8b",
+        "29c788c84f84cbd17ba517b581b0f76dd3deb633",
+        "b2f74a79d2de5e11eee9dbf72d47ece3e1a4884f",
+        "104669bb40a5f579606305ccabce2dd0ecbaf262",
+        "e318eda8338f2022e1aadb511da241aacc49a427",
+        "1727ab575c72c7b1909e530f2ae2d7f77a27131c",
+        "c760c41d76728c1f7a0f48ad12bc6c3334bdf185",
+        "6122ca8f395c851da6d526a893c89672b7c66073",
+        "6e512d7afb082c29970d3149c6d5ab846c69b055",
+        "5861564174e9dbf930bb1fc2d101bf1558a71bb4",
+        "c8df90282d35731d674ce4d18f626fb5759ea7a0",
+        "8cc519ee4cb9681c6b65e34e513130180c4f7cba",
+        "9249ae42b1650bd877b998ff60b715fab427de49",
+        "5bb35faf5b2f4651985f9af6af94f3340b25177c",
+        "f78ff1db3c7132d13214f3a4ef4d24f94953b6f9",
+        "466c69bbd7b406d82843dcaa48cbaade3813c3d3",
+        "fb083050680ed21362c3650853574c5ce03fdb6a",
+        "17ea5b1e10dcd7d587ad896ac8b6cc7aa0e18eb8",
+        "a37b49f88ac787bf14ceb30ef7143c41efc33a54"
+      ],
+      "new_commits": [
+        "c1a774b16bd129e33fd8e6b3355d3b7ce02ef46e"
+      ],
+      "prior_commits": [
+        "cf68e45b66d22c441a7fbab5dc5c9e4ab672e588",
+        "ec919a95e19d540c48207f6d3d1dc9f089f451c0",
+        "0e2f069741ac0d859794b6956404f42e85e852b5",
+        "ee77f05ffb676fa5f41ae9e5b222078c477a424d",
+        "112215e541b49ce4447a4a01624404c14124b43a",
+        "35215aa2f899149bd885520b482392ac0ce7eaef",
+        "278bbf8e2ebd0ace29085c8c656d86dc718f002b",
+        "62f1a67d20a8a641b4777f966293d0427082215e",
+        "e4f0bd9cac685bf9aef869d215770f59358f7b1f",
+        "7c4872578fb5fefd9012e3661e67b9e07b241f8b",
+        "29c788c84f84cbd17ba517b581b0f76dd3deb633",
+        "b2f74a79d2de5e11eee9dbf72d47ece3e1a4884f",
+        "104669bb40a5f579606305ccabce2dd0ecbaf262",
+        "e318eda8338f2022e1aadb511da241aacc49a427",
+        "1727ab575c72c7b1909e530f2ae2d7f77a27131c",
+        "c760c41d76728c1f7a0f48ad12bc6c3334bdf185",
+        "6122ca8f395c851da6d526a893c89672b7c66073",
+        "6e512d7afb082c29970d3149c6d5ab846c69b055",
+        "5861564174e9dbf930bb1fc2d101bf1558a71bb4",
+        "c8df90282d35731d674ce4d18f626fb5759ea7a0",
+        "8cc519ee4cb9681c6b65e34e513130180c4f7cba",
+        "9249ae42b1650bd877b998ff60b715fab427de49",
+        "5bb35faf5b2f4651985f9af6af94f3340b25177c",
+        "f78ff1db3c7132d13214f3a4ef4d24f94953b6f9",
+        "466c69bbd7b406d82843dcaa48cbaade3813c3d3",
+        "fb083050680ed21362c3650853574c5ce03fdb6a",
+        "17ea5b1e10dcd7d587ad896ac8b6cc7aa0e18eb8",
+        "a37b49f88ac787bf14ceb30ef7143c41efc33a54"
+      ],
+      "findings": [],
+      "repairs": [],
+      "counts": {},
+      "reviewed": 9,
+      "review": {
+        "status": "reviewed",
+        "rejected": [],
+        "files": [
+          ".aikit/codebase_map.md",
+          ".aikit/project.json",
+          ".gitignore",
+          "CHANGELOG.md",
+          "README.md",
+          "assay/adapters.py",
+          "assay/ledger.py",
+          "tests/test_adapters.py",
+          "tests/test_ledger.py"
+        ],
+        "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\assay\\.aikit\\reforge.reviews\\stage-11-c1a774b16bd1.md",
+        "redacted": 0,
+        "reason": "the answer held no findings",
+        "findings": []
+      },
+      "skipped": [],
+      "tests": {},
+      "gates": {},
+      "timestamp": "2026-10-29T17:25:12"
     }
   ]
 }

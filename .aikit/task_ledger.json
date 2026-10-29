@@ -12,31 +12,6 @@
   },
   "checkpoints": [
     {
-      "task_id": "assay-anchors-v1",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'assay-anchors-v1' completed successfully.",
-      "status": "completed",
-      "timestamp": 1792831126.5256057,
-      "timestamp_str": "2026-10-24 11:38:46"
-    },
-    {
-      "task_id": "assay-adapters-v1",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/4] Core adapter layer: assay/adapters.py with pure standard-library transformers for MCP, OpenAI, LangGraph, and CrewAI schemas. [2/4] CLI integration: expand 'assay ingest --format' with openai, langgraph, crewai in assay/cli.py. [3/4] Tests & fixtures: test_adapters.py with fixture streams for each framework, edge cases, malformed inputs. [4/4] ADR-007, documentation guides, export in __init__.py, Phase 4 gates.",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792831409.65769,
-      "timestamp_str": "2026-10-24 11:43:29",
-      "impact_assessment": {
-        "why": "Agent frameworks (OpenAI, LangGraph, CrewAI, MCP) emit distinct event telemetry; native adapters eliminate custom glue code and standardize evidence fields.",
-        "benefits": "Zero-dependency ingestion for top 4 agent ecosystems via CLI flags and Python helpers; enables 5-line evidence recording.",
-        "risks": "contract: new adapters module and CLI choices; dependency: none (standard library only); concurrency: stateless transformers; state: creates standard Event records without ledger schema changes",
-        "mitigation": "Duck-typing dictionary inputs with schema validation; failing-first tests across framework sample outputs; strict AST and Phase 4 gates"
-      }
-    },
-    {
       "task_id": "assay-adapters-v1",
       "phase": "phase 4",
       "phase_num": 4,
@@ -89,17 +64,6 @@
       "status": "completed",
       "timestamp": 1792832170.1018786,
       "timestamp_str": "2026-10-24 11:56:10"
-    },
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge run",
-      "phase_num": 3,
-      "description": "run started (start=3, step=3, stop=None)",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793283069.9495523,
-      "timestamp_str": "2026-10-29 17:11:09",
-      "agent": "opencode"
     },
     {
       "task_id": "reforge:run-1",
@@ -243,6 +207,39 @@
       "status": "in_progress",
       "timestamp": 1793283877.659537,
       "timestamp_str": "2026-10-29 17:24:37",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 10",
+      "phase_num": 3,
+      "description": "Reforge stage 10: run resumed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793283898.379552,
+      "timestamp_str": "2026-10-29 17:24:58",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 11",
+      "phase_num": 3,
+      "description": "Reforge stage 11: window 29, 1 commit(s), 9 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793283912.597435,
+      "timestamp_str": "2026-10-29 17:25:12",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 11",
+      "phase_num": 3,
+      "description": "Reforge stage 11: run stopped at stage 11; resume it with `reforge resume`",
+      "files_affected": [],
+      "status": "suspended",
+      "timestamp": 1793283940.4259112,
+      "timestamp_str": "2026-10-29 17:25:40",
       "agent": "opencode"
     }
   ]
