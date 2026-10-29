@@ -211,7 +211,9 @@ class Ledger:
             ) from exc
         seq = value.get("seq") if isinstance(value, dict) else None
         digest = value.get("hash") if isinstance(value, dict) else None
-        if isinstance(seq, bool) or not isinstance(seq, int) or not isinstance(digest, str):
+        if (isinstance(seq, bool) or not isinstance(seq, int) or seq < 0
+                or not isinstance(digest, str) or len(digest) != 64
+                or any(char not in "0123456789abcdef" for char in digest)):
             raise LedgerError(
                 "The last ledger record has no valid seq/hash pair.",
                 "a new record cannot extend a chain whose tail is corrupt.",

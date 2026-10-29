@@ -143,6 +143,17 @@ class LedgerTests(unittest.TestCase):
         with self.assertRaises(LedgerError):
             Ledger(self.path).append(_event(1))
 
+    def test_append_refuses_a_tail_with_an_invalid_hash(self):
+        self.path.write_text(json.dumps({"seq": 0, "hash": "x"}) + "\n", encoding="utf-8")
+        with self.assertRaises(LedgerError):
+            Ledger(self.path).append(_event(1))
+
+    def test_append_refuses_a_negative_tail_seq(self):
+        self.path.write_text(json.dumps({"seq": -1, "hash": ZERO_HASH}) + "\n",
+                             encoding="utf-8")
+        with self.assertRaises(LedgerError):
+            Ledger(self.path).append(_event(1))
+
     def test_missing_ledger_raises(self):
         with self.assertRaises(LedgerError):
             Ledger(self.path).inspect()

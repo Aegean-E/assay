@@ -3,6 +3,7 @@
 .aikit/*.bak
 .aikit/*.tmp_*
 .aikit/*.corrupt_*
+.aikit/reforge.reviews/
 __pycache__/
 *.py[cod]
 *.egg-info/

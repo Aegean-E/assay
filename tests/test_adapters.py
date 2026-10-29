@@ -51,6 +51,12 @@ class GenericAdapterTests(unittest.TestCase):
         event = generic_event({"action": "ping"}, actor_default="fallback:agent")
         self.assertEqual(event.actor, "fallback:agent")
 
+    def test_unknown_outcome_is_rejected(self):
+        with self.assertRaises(ValidationError):
+            generic_event({"actor": "agent:a", "action": "ping", "outcome": "failed"})
+        with self.assertRaises(ValidationError):
+            generic_event({"actor": "agent:a", "action": "ping", "status": 500})
+
 
 class McpAdapterTests(unittest.TestCase):
     def test_tools_call_event(self):

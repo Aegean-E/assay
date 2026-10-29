@@ -23,6 +23,11 @@ project uses semantic versioning.
 - CLI policy inspection commands (`assay policy list` and `assay policy show`).
 - Architecture Decision Records ADR-006, ADR-007, and ADR-008 in `.aikit/decisions.md`.
 
+### Fixed
+
+- Generic ingestion now rejects an unknown outcome value instead of silently recording it as `success`.
+- Ledger appends now refuse a malformed tail hash or a negative sequence instead of extending a corrupt chain.
+
 ## [0.1.0] - 2026-10-23
 
 ### Added

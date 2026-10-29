@@ -1,122 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "assay-policies-v1",
+    "task_id": "reforge:run-1",
     "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1792832164.2931077,
-    "completed_at": 1792832170.101877
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1793283877.659537,
+    "owner": "opencode",
+    "started_by": "opencode",
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "assay-mvp-v1",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/6] Product contract: tamper-evident audit evidence for AI agents, AGPL-3.0 core with commercial licensing path",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792775082.325997,
-      "timestamp_str": "2026-10-23 20:04:42",
-      "impact_assessment": {
-        "why": "Companies deploying tool-using agents need defensible records for EU AI Act, ISO 42001 and customer audits; observability traces are not evidence.",
-        "benefits": "A local-first, zero-dependency evidence ledger plus policy findings and a self-contained pack gives buyers a 60-second proof and a clear enterprise upsell.",
-        "risks": "contract: hash-chain and event schema are compatibility surfaces; dependency: none beyond the Python standard library; concurrency: append-only single-writer ledger; state: HMAC key handling and PII retention.",
-        "mitigation": "Version every schema, document the threat model and format, fsync appends, keep keys out of argv/files, recommend WORM storage and PII minimization."
-      }
-    },
-    {
-      "task_id": "assay-mvp-v1",
-      "phase": "phase 3",
-      "phase_num": 3,
-      "description": "[2/6] Core evidence model: canonical event contract, contiguous SHA-256 chain, optional HMAC, tail-read append, tamper and truncation tests",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792782285.9207084,
-      "timestamp_str": "2026-10-23 22:04:45"
-    },
-    {
-      "task_id": "assay-mvp-v1",
-      "phase": "phase 3",
-      "phase_num": 3,
-      "description": "[3/6] Policy engine: first-match rules, action globs, metadata conditions, amount thresholds, fail-closed missing amounts, policy digest binding and drift findings",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792782288.7380965,
-      "timestamp_str": "2026-10-23 22:04:48"
-    },
-    {
-      "task_id": "assay-mvp-v1",
-      "phase": "phase 3",
-      "phase_num": 3,
-      "description": "[4/6] CLI and evidence packs: record, ingest generic/MCP, verify, review, report Markdown/JSON, demo, Error/Why/Fix triad and 0/1/2 exit codes",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792782292.4205685,
-      "timestamp_str": "2026-10-23 22:04:52"
-    },
-    {
-      "task_id": "assay-mvp-v1",
-      "phase": "phase 3",
-      "phase_num": 3,
-      "description": "[5/6] Commercial surface: AGPL-3.0 LICENSE, packaging and console script, cross-platform launchers, CI matrix, business brief, compliance mapping, threat model and launch kit",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792782295.11111,
-      "timestamp_str": "2026-10-23 22:04:55"
-    },
-    {
-      "task_id": "assay-mvp-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[6/6] Verification: 73 tests pass; AIKit 4/4 gates pass; package install and console script smoke; all three launchers smoke-tested. checklists: passed. Delivery not authorized: 5 modified, 13 untracked.",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792782306.6856322,
-      "timestamp_str": "2026-10-23 22:05:06",
-      "handoff": {
-        "state": "73 tests, 4/4 gates, project complete in working tree",
-        "next": "commit and publish only after explicit authorization",
-        "failed": "none",
-        "open": "delivery not authorized",
-        "evidence": "aikit check output and docs/LAUNCH.md"
-      }
-    },
-    {
-      "task_id": "assay-mvp-v1",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'assay-mvp-v1' completed successfully.",
-      "status": "completed",
-      "timestamp": 1792783024.1932974,
-      "timestamp_str": "2026-10-23 22:17:04"
-    },
-    {
-      "task_id": "assay-anchors-v1",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/4] Anchor format and journal: canonical anchor payload, strict field validation, append-only journal chained by prev+hash, reader that reports tamper and rollback. [2/4] 'assay anchor' command: verify the ledger first, refuse a broken or empty chain, append {ledger, seq, head, created_at, key_id}. [3/4] 'assay verify --anchors FILE': cross-check every anchored head against the ledger so tail truncation and a full rewrite exit 1. [4/4] Key id and rotation format, published anchor test vector, ADR-006, docs/SECURITY.md and README roadmap, Phase 4 gates.",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792829715.401814,
-      "timestamp_str": "2026-10-24 11:15:15",
-      "impact_assessment": {
-        "why": "The hash chain cannot detect tail truncation or a full rewrite, and docs/SECURITY.md plus ADR-002 both name head anchoring as the first enterprise gap; roadmap item 1 asks for it with a key id and rotation format.",
-        "benefits": "An anchored head proves the ledger reached a known seq/hash; truncation and whole-chain rewrites become detectable offline with the standard library, completing the evidence story the product already claims.",
-        "risks": "contract: a new on-disk anchor format and two CLI surfaces (anchor, verify --anchors); dependency: none, standard library only; concurrency: a second append-only file with the same single-writer assumption as the ledger; state: new anchor journal plus optional key id, no change to existing records; perf: one extra read of ledger and journal on verify",
-        "mitigation": "Strict canonical payload with unknown-field refusal and a published test vector; failing-first tests for tamper, deletion, seq rollback, truncation and rewrite; reuse append_line/fsync and tail reads; keep anchors strictly additive so existing ledgers verify unchanged; ADR and security docs updated before delivery; Phase 4 gates"
-      }
-    },
-    {
-      "task_id": "assay-anchors-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[4/4] Head anchoring with key id and rotation, published anchor test vector, verify cross-checks, ADR-006, docs and tests; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792831088.0474548,
-      "timestamp_str": "2026-10-24 11:38:08"
-    },
     {
       "task_id": "assay-anchors-v1",
       "phase": "completed",
@@ -195,6 +89,161 @@
       "status": "completed",
       "timestamp": 1792832170.1018786,
       "timestamp_str": "2026-10-24 11:56:10"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge run",
+      "phase_num": 3,
+      "description": "run started (start=3, step=3, stop=None)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793283069.9495523,
+      "timestamp_str": "2026-10-29 17:11:09",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 1",
+      "phase_num": 3,
+      "description": "Reforge stage 1: window 3, 3 commit(s), 2 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793283073.72871,
+      "timestamp_str": "2026-10-29 17:11:13",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 2",
+      "phase_num": 3,
+      "description": "Reforge stage 2: window 6, 3 commit(s), 2 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired, 1 binary not analysed",
+      "files_affected": [
+        "assets/social-preview.png"
+      ],
+      "status": "in_progress",
+      "timestamp": 1793283105.1572175,
+      "timestamp_str": "2026-10-29 17:11:45",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 3",
+      "phase_num": 3,
+      "description": "Reforge stage 3: window 9, 3 commit(s), 2 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired, 5 binary not analysed",
+      "files_affected": [
+        "assets/artwork.jpg",
+        "assets/logo.jpg",
+        "assets/logo.png",
+        "assets/social-preview.jpg",
+        "assets/social-preview.png"
+      ],
+      "status": "in_progress",
+      "timestamp": 1793283123.5603933,
+      "timestamp_str": "2026-10-29 17:12:03",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 4",
+      "phase_num": 3,
+      "description": "Reforge stage 4: window 12, 3 commit(s), 3 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired, 1 binary not analysed",
+      "files_affected": [
+        "assets/social-preview.png"
+      ],
+      "status": "in_progress",
+      "timestamp": 1793283140.3109913,
+      "timestamp_str": "2026-10-29 17:12:20",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 5",
+      "phase_num": 3,
+      "description": "Reforge stage 5: window 15, 3 commit(s), 12 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired, 1 binary not analysed",
+      "files_affected": [
+        "assets/social-preview.png"
+      ],
+      "status": "in_progress",
+      "timestamp": 1793283155.6580229,
+      "timestamp_str": "2026-10-29 17:12:35",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 6",
+      "phase_num": 3,
+      "description": "Reforge stage 6: window 18, 3 commit(s), 3 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793283175.3333683,
+      "timestamp_str": "2026-10-29 17:12:55",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 7",
+      "phase_num": 3,
+      "description": "Reforge stage 7: window 21, 3 commit(s), 8 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793283191.0564814,
+      "timestamp_str": "2026-10-29 17:13:11",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 8",
+      "phase_num": 3,
+      "description": "Reforge stage 8: window 24, 3 commit(s), 15 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793283238.184714,
+      "timestamp_str": "2026-10-29 17:13:58",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 9",
+      "phase_num": 3,
+      "description": "Reforge stage 9: window 27, 3 commit(s), 45 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793283332.2766726,
+      "timestamp_str": "2026-10-29 17:15:32",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 10",
+      "phase_num": 3,
+      "description": "Reforge stage 10: window 28, 1 commit(s), 5 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793283630.6986308,
+      "timestamp_str": "2026-10-29 17:20:30",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 10",
+      "phase_num": 3,
+      "description": "Reforge stage 10: run stopped at stage 10; resume it with `reforge resume`",
+      "files_affected": [],
+      "status": "suspended",
+      "timestamp": 1793283651.6650746,
+      "timestamp_str": "2026-10-29 17:20:51",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[4/4] Reforge repair of stage 9: reject unknown ingest outcomes and malformed ledger tails; regression tests added; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793283877.659537,
+      "timestamp_str": "2026-10-29 17:24:37",
+      "agent": "opencode"
     }
   ]
 }

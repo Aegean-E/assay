@@ -9,8 +9,8 @@
 - **Total Python Modules**: `23`
 - **Total Classes**: `37`
 - **Total Top-Level Functions**: `79`
-- **Total Class Methods**: `169`
-- **Total Source Lines**: `4007`
+- **Total Class Methods**: `172`
+- **Total Source Lines**: `4036`
 
 ---
 
@@ -33,7 +33,7 @@
 ### [`assay/adapters.py`](assay/adapters.py)
 > *Adapters that transform event telemetry from major agent frameworks into Assay events.*
 
-**Size**: `318` lines (`13926` bytes)
+**Size**: `328` lines (`14341` bytes)
 
 **Functions:**
 - `def _value(row, *names, default)`
@@ -146,7 +146,7 @@
 ### [`assay/ledger.py`](assay/ledger.py)
 > *Append-only hash-chained ledger with optional HMAC signing.*
 
-**Size**: `220` lines (`8932` bytes)
+**Size**: `222` lines (`9056` bytes)
 
 **Classes:**
 - `class Verification` - *The outcome of walking the whole chain once.*
@@ -273,7 +273,7 @@
 ### [`tests/test_adapters.py`](tests/test_adapters.py)
 > *Agent framework adapter tests for MCP, OpenAI, LangGraph, and CrewAI.*
 
-**Size**: `248` lines (`8720` bytes)
+**Size**: `254` lines (`9035` bytes)
 
 **Classes:**
 - `class GenericAdapterTests`
@@ -281,6 +281,7 @@
   - Method `.test_alternate_field_names()`
   - Method `.test_missing_actor_raises()`
   - Method `.test_actor_fallback()`
+  - Method `.test_unknown_outcome_is_rejected()`
 - `class McpAdapterTests`
   - Method `.test_tools_call_event()`
   - Method `.test_non_tool_call_returns_none()`
@@ -395,7 +396,7 @@
 ### [`tests/test_ledger.py`](tests/test_ledger.py)
 > *Hash chain, tamper detection and signing tests.*
 
-**Size**: `152` lines (`6393` bytes)
+**Size**: `163` lines (`6917` bytes)
 
 **Classes:**
 - `class LedgerTests`
@@ -415,6 +416,8 @@
   - Method `.test_unsigned_chain_fails_when_a_key_is_supplied()`
   - Method `.test_mixed_signing_is_detected()`
   - Method `.test_append_refuses_a_corrupt_tail()`
+  - Method `.test_append_refuses_a_tail_with_an_invalid_hash()`
+  - Method `.test_append_refuses_a_negative_tail_seq()`
   - Method `.test_missing_ledger_raises()`
 
 **Functions:**

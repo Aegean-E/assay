@@ -323,6 +323,7 @@ assay/
 ├── LICENSES/                 <- REUSE license texts
 ├── REUSE.toml                <- Machine-readable SPDX metadata
 ├── README.md
+├── assets/
 ├── COMMERCIAL.md
 ├── SECURITY.md
 ├── assay/                    <- package source

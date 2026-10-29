@@ -55,9 +55,19 @@ def generic_event(row: Mapping[str, Any], actor_default: Optional[str] = None,
             "add action/tool/name, or fix the producer mapping.",
         )
     raw_outcome = _value(row, "outcome", "status", default="success")
-    outcome = raw_outcome.lower() if isinstance(raw_outcome, str) else "success"
+    if not isinstance(raw_outcome, str):
+        raise ValidationError(
+            f"Unrecognized outcome {raw_outcome!r}.",
+            f"the event contract allows: {', '.join(OUTCOMES)}.",
+            "fix the producer outcome or map it explicitly.",
+        )
+    outcome = raw_outcome.strip().lower()
     if outcome not in OUTCOMES:
-        outcome = "success"
+        raise ValidationError(
+            f"Unknown outcome '{raw_outcome}'.",
+            f"the event contract allows: {', '.join(OUTCOMES)}.",
+            "fix the producer outcome or map it explicitly.",
+        )
     metadata = _value(row, "metadata", "arguments", "input", default={})
     if not isinstance(metadata, Mapping):
         metadata = _as_dict(metadata)
